@@ -63,9 +63,11 @@ export default async function Home({ params }) {
                     <div className="tile-media">
                       <img src={photo.url} alt={imgAlt(photo, locale)} loading="lazy" />
                       <div className="tile-tint" style={{ background: c.color }} />
+                      <div className="tile-overlay">
+                        <h3>{locale === 'ar' ? c.ar : c.en}</h3>
+                        <p>{count} {dict.shop.results}</p>
+                      </div>
                     </div>
-                    <h3>{locale === 'ar' ? c.ar : c.en}</h3>
-                    <p>{count} {dict.shop.results}</p>
                   </Link>
                 </Reveal>
               );

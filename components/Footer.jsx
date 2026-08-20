@@ -13,27 +13,27 @@ export default function Footer({ dict, locale }) {
           <p style={{ fontFamily: 'var(--f-plexar), sans-serif', opacity: 0.85 }}>{dict.footer.arabicName}</p>
         </div>
         <div>
-          <h4>{dict.footer.shop}</h4>
+          <h3>{dict.footer.shop}</h3>
           <Link href={`/${locale}/shop`}>{dict.nav.shop}</Link>
           <Link href={`/${locale}/drops`}>{dict.nav.drops}</Link>
           <Link href={`/${locale}/about`}>{dict.nav.about}</Link>
         </div>
         <div>
-          <h4>{dict.footer.help}</h4>
+          <h3>{dict.footer.help}</h3>
           <Link href={`/${locale}/contact`}>{dict.nav.contact}</Link>
           <Link href={`/${locale}/faq`}>{dict.policies.faq}</Link>
           <a href={`mailto:${email}`}>{email}</a>
           {wa && <a href={`https://wa.me/${wa}`} target="_blank" rel="noreferrer">WhatsApp</a>}
         </div>
         <div>
-          <h4>{dict.policies.title}</h4>
+          <h3>{dict.policies.title}</h3>
           <Link href={`/${locale}/policies/shipping`}>{dict.policies.shipping}</Link>
           <Link href={`/${locale}/policies/returns`}>{dict.policies.returns}</Link>
           <Link href={`/${locale}/policies/privacy`}>{dict.policies.privacy}</Link>
           <Link href={`/${locale}/policies/terms`}>{dict.policies.terms}</Link>
         </div>
         <div>
-          <h4>{dict.footer.follow}</h4>
+          <h3>{dict.footer.follow}</h3>
           <a href={ig} target="_blank" rel="noreferrer">Instagram</a>
           {wa && <a href={`https://wa.me/${wa}`} target="_blank" rel="noreferrer">WhatsApp</a>}
           <div className="payment-row">

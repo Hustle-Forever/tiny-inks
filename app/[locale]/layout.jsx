@@ -1,0 +1,77 @@
+import '../globals.css';
+import { Fraunces, Karla, El_Messiri, IBM_Plex_Sans_Arabic } from 'next/font/google';
+import { getDict, LOCALES } from '@/lib/dictionaries';
+import { CartProvider } from '@/components/CartContext';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import CartDrawer from '@/components/CartDrawer';
+
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  style: ['normal', 'italic'],
+  variable: '--f-fraunces',
+  display: 'swap',
+});
+const karla = Karla({
+  subsets: ['latin'],
+  weight: ['400', '700', '800'],
+  variable: '--f-karla',
+  display: 'swap',
+});
+const messiri = El_Messiri({
+  subsets: ['arabic'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--f-messiri',
+  display: 'swap',
+});
+const plexArabic = IBM_Plex_Sans_Arabic({
+  subsets: ['arabic'],
+  weight: ['400', '500', '700'],
+  variable: '--f-plexar',
+  display: 'swap',
+});
+
+export function generateStaticParams() {
+  return LOCALES.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({ params }) {
+  const dict = getDict(params.locale);
+  return {
+    title: {
+      default: `Tiny Inks — ${dict.tagline}`,
+      template: '%s · Tiny Inks',
+    },
+    description: dict.hero.lede,
+    icons: { icon: '/logo-icon.png' },
+  };
+}
+
+export const viewport = { themeColor: '#FBF0E4' };
+
+export default function LocaleLayout({ children, params }) {
+  const locale = LOCALES.includes(params.locale) ? params.locale : 'en';
+  const dict = getDict(locale);
+  const dir = locale === 'ar' ? 'rtl' : 'ltr';
+
+  return (
+    <html
+      lang={locale}
+      dir={dir}
+      className={`${fraunces.variable} ${karla.variable} ${messiri.variable} ${plexArabic.variable}`}
+    >
+      <body>
+        <a className="skip-link" href="#content">
+          {locale === 'ar' ? 'تخطَّ إلى المحتوى' : 'Skip to content'}
+        </a>
+        <CartProvider>
+          <Header dict={dict} locale={locale} />
+          <main id="content">{children}</main>
+          <Footer dict={dict} locale={locale} />
+          <CartDrawer dict={dict} locale={locale} />
+        </CartProvider>
+      </body>
+    </html>
+  );
+}

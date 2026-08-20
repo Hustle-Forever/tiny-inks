@@ -1,0 +1,38 @@
+import Link from 'next/link';
+
+export default function Footer({ dict, locale }) {
+  const ig = process.env.NEXT_PUBLIC_INSTAGRAM_URL || '#';
+  const email = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'hello@tinyinks.ae';
+  const wa = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '';
+  return (
+    <footer className="footer">
+      <div className="wrap footer-inner">
+        <div className="footer-brand">
+          <img src="/logo-icon.png" alt="Tiny Inks" />
+          <p>{dict.footer.blurb}</p>
+          <p style={{ fontFamily: 'var(--f-plexar), sans-serif', opacity: 0.85 }}>{dict.footer.arabicName}</p>
+        </div>
+        <div>
+          <h4>{dict.footer.shop}</h4>
+          <Link href={`/${locale}/shop`}>{dict.nav.shop}</Link>
+          <Link href={`/${locale}/drops`}>{dict.nav.drops}</Link>
+          <Link href={`/${locale}/about`}>{dict.nav.about}</Link>
+        </div>
+        <div>
+          <h4>{dict.footer.help}</h4>
+          <Link href={`/${locale}/contact`}>{dict.nav.contact}</Link>
+          <a href={`mailto:${email}`}>{email}</a>
+        </div>
+        <div>
+          <h4>{dict.footer.follow}</h4>
+          <a href={ig} target="_blank" rel="noreferrer">Instagram</a>
+          {wa && <a href={`https://wa.me/${wa}`} target="_blank" rel="noreferrer">WhatsApp</a>}
+        </div>
+      </div>
+      <div className="wrap footer-bottom">
+        <span>© {new Date().getFullYear()} Tiny Inks · Dubai</span>
+        <span>{dict.footer.rights}</span>
+      </div>
+    </footer>
+  );
+}

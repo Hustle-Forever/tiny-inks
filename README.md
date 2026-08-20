@@ -4,7 +4,7 @@ Custom Next.js storefront for **Tiny Inks** (تايني انكس للقرطاس�
 built on the brand palette extracted from the logo, with Shopify as the backend for
 products, cart, checkout, and order management.
 
-**Pages:** Home · Shop (with filters) · Tiny Drops · About · Contact · Product pages · Cart drawer
+**Pages:** Home · Shop (with filters) · Tiny Drops · About · Contact · Product pages · Cart drawer · Cart page · Policies (privacy / terms / shipping / returns) · FAQ
 
 ---
 
@@ -84,10 +84,34 @@ payments, and orders in the admin) are now live.
 |---|---|
 | WhatsApp number, Instagram, email | `.env.local` (`NEXT_PUBLIC_WHATSAPP_NUMBER` etc.) |
 | Drop 01 countdown date | `NEXT_PUBLIC_DROP_DATE` in `.env.local` |
+| Site URL (SEO/sitemap) | `NEXT_PUBLIC_SITE_URL` in `.env.local` |
+| **All photos on the site** | **`lib/images.js` — one file, see below** |
 | All wording (EN + AR) | `lib/dictionaries.js` |
+| Policy pages & FAQ (EN + AR) | `content/policies/*.js` |
 | Brand colors / spacing / animations | `app/globals.css` (top `:root` block) |
 | Demo products | `lib/mock-data.js` |
 | Hero shapes | `components/HeroAssembly.jsx` |
+
+### 📷 Swapping in your real photos (do this before launch)
+Every image on the site — hero photos, category tiles, the editorial photo, the
+"From the desk" gallery, Instagram polaroids, and demo product photos — comes from
+**one file: `lib/images.js`**. The current images are curated Unsplash placeholders.
+Replace each `url` with your own photo (uploaded to Shopify Files, or `/public/photos/...`)
+and update the `alt` texts (both EN and AR). Nothing else needs to change.
+In live mode, product page photos come from Shopify product images automatically.
+
+### 📄 Policies (template text — review before launch!)
+`/policies/privacy` · `/policies/terms` · `/policies/shipping` · `/policies/returns` · `/faq`
+live in `content/policies/*.js` in both languages. They contain placeholders —
+`[LEGAL BUSINESS NAME]`, `[TRADE LICENSE NO.]`, `[EMAIL]`, `[ADDRESS]` — fill them in,
+read every line (delivery fees, return window, etc. are sensible defaults, not legal advice),
+and copy the same text into **Shopify Settings → Policies** so checkout shows matching policies.
+
+### ✨ React Bits animations
+The hero headline (SplitText — per-letter EN, whole-word AR), countdown digits (CountUp),
+"From the desk" gallery (Masonry), section reveals (FadeContent), and the editorial photo
+tilt (TiltedCard) use [React Bits](https://reactbits.dev) components, re-themed to the brand
+and living in `components/reactbits/`. All of them turn off under `prefers-reduced-motion`.
 
 **Honest notes**
 - The 3 customer reviews on the home page are **sample placeholders** — replace them with real ones in `app/[locale]/page.jsx`.

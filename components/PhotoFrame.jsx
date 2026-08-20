@@ -15,10 +15,11 @@ export default function PhotoFrame({
 }) {
   if (!photo?.url) return null;
   const alt = (photo.alt && (photo.alt[locale] || photo.alt.en)) || photo.alt || '';
+  const src = variant === 'polaroid' ? photo.sm || photo.url : photo.url;
   return (
     <figure className={`pframe pframe-${variant} ${tape ? 'pframe-tape' : ''} ${className}`} style={style}>
       <div className="pframe-media">
-        <img src={photo.url} alt={typeof alt === 'string' ? alt : ''} loading="lazy" style={imgStyle} />
+        <img src={src} alt={typeof alt === 'string' ? alt : ''} loading="lazy" style={imgStyle} />
       </div>
       {caption ? <figcaption>{caption}</figcaption> : null}
     </figure>

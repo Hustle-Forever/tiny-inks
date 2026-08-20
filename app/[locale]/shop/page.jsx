@@ -1,5 +1,4 @@
 import { Suspense } from 'react';
-import Reveal from '@/components/Reveal';
 import ShopClient from '@/components/ShopClient';
 import { getDict } from '@/lib/dictionaries';
 import { getProducts } from '@/lib/products';
@@ -15,13 +14,9 @@ export default async function ShopPage({ params }) {
   const products = await getProducts(locale);
 
   return (
-    <section className="section" style={{ paddingTop: 'clamp(40px, 6vw, 70px)' }}>
+    <section className="section" style={{ paddingTop: 'clamp(18px, 3vw, 34px)' }}>
       <div className="wrap">
-        <Reveal>
-          <div className="eyebrow">Tiny Inks</div>
-          <h1 style={{ fontSize: 'clamp(2.2rem, 5vw, 3.6rem)' }}>{dict.shop.title}</h1>
-          <p className="lede" style={{ marginBottom: 44 }}>{dict.shop.lede}</p>
-        </Reveal>
+        <h1 className="shop-h1">{dict.shop.title}</h1>
         <Suspense>
           <ShopClient products={products} dict={dict} locale={locale} />
         </Suspense>

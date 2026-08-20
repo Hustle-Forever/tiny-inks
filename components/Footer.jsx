@@ -1,11 +1,27 @@
 import Link from 'next/link';
+import { CATEGORIES } from '@/lib/mock-data';
 
 export default function Footer({ dict, locale }) {
   const ig = process.env.NEXT_PUBLIC_INSTAGRAM_URL || '#';
   const email = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'hello@tinyinks.ae';
-  const wa = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '';
+  const wa = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '971500000000';
+  const suggestHref = `https://wa.me/${wa}?text=${encodeURIComponent(dict.footerUi.suggestMsg)}`;
+
   return (
     <footer className="footer">
+      {/* prominent contact + suggest strip */}
+      <div className="wrap footer-contact">
+        <div className="footer-contact-line">
+          <strong>{dict.footerUi.contactTitle}:</strong>
+          <a href={`mailto:${email}`}>{email}</a>
+          <span aria-hidden="true">·</span>
+          <a href={`https://wa.me/${wa}`} target="_blank" rel="noreferrer">WhatsApp +{wa}</a>
+        </div>
+        <a className="btn btn-primary btn-sm" href={suggestHref} target="_blank" rel="noreferrer">
+          {dict.footerUi.suggest}
+        </a>
+      </div>
+
       <div className="wrap footer-inner">
         <div className="footer-brand">
           <img src="/logo-icon.png" alt="Tiny Inks" />
@@ -13,33 +29,35 @@ export default function Footer({ dict, locale }) {
           <p style={{ fontFamily: 'var(--f-plexar), sans-serif', opacity: 0.85 }}>{dict.footer.arabicName}</p>
         </div>
         <div>
-          <h3>{dict.footer.shop}</h3>
-          <Link href={`/${locale}/shop`}>{dict.nav.shop}</Link>
-          <Link href={`/${locale}/bundles`}>{dict.nav.drops}</Link>
+          <h3>{dict.footerUi.company}</h3>
           <Link href={`/${locale}/about`}>{dict.nav.about}</Link>
+          <Link href={`/${locale}/contact`}>{dict.nav.contact}</Link>
+          <a href={`https://wa.me/${wa}?text=${encodeURIComponent(dict.footerUi.bulkMsg)}`} target="_blank" rel="noreferrer">{dict.nav.bulk}</a>
+        </div>
+        <div>
+          <h3>{dict.footer.shop}</h3>
+          <Link href={`/${locale}/shop`}>{dict.nav.allProducts}</Link>
+          {CATEGORIES.slice(0, 3).map((c) => (
+            <Link key={c.key} href={`/${locale}/shop?type=${encodeURIComponent(c.match[0])}`}>
+              {locale === 'ar' ? c.ar : c.en}
+            </Link>
+          ))}
+          <Link href={`/${locale}/bundles`}>{dict.nav.drops}</Link>
         </div>
         <div>
           <h3>{dict.footer.help}</h3>
-          <Link href={`/${locale}/contact`}>{dict.nav.contact}</Link>
           <Link href={`/${locale}/faq`}>{dict.policies.faq}</Link>
-          <a href={`mailto:${email}`}>{email}</a>
-          {wa && <a href={`https://wa.me/${wa}`} target="_blank" rel="noreferrer">WhatsApp</a>}
+          <Link href={`/${locale}/policies/shipping`}>{dict.policies.shipping}</Link>
+          <Link href={`/${locale}/policies/returns`}>{dict.policies.returns}</Link>
+          <Link href={`/${locale}/wishlist`}>{dict.nav.wishlist}</Link>
         </div>
         <div>
           <h3>{dict.policies.title}</h3>
-          <Link href={`/${locale}/policies/shipping`}>{dict.policies.shipping}</Link>
-          <Link href={`/${locale}/policies/returns`}>{dict.policies.returns}</Link>
           <Link href={`/${locale}/policies/privacy`}>{dict.policies.privacy}</Link>
           <Link href={`/${locale}/policies/terms`}>{dict.policies.terms}</Link>
-        </div>
-        <div>
-          <h3>{dict.footer.follow}</h3>
+          <h3 style={{ marginTop: 18 }}>{dict.footer.follow}</h3>
           <a href={ig} target="_blank" rel="noreferrer">Instagram</a>
-          {wa && <a href={`https://wa.me/${wa}`} target="_blank" rel="noreferrer">WhatsApp</a>}
-          <div className="payment-row">
-            <span className="label">{dict.payment.accept}</span>
-          </div>
-          <div className="payment-row" style={{ marginTop: 6 }}>
+          <div className="payment-row" style={{ marginTop: 10 }}>
             {dict.payment.methods.map((m) => (
               <span className="payment-pill" key={m}>{m}</span>
             ))}

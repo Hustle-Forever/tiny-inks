@@ -1,17 +1,13 @@
 import Link from 'next/link';
-import HeroAssembly from '@/components/HeroAssembly';
-import Marquee from '@/components/Marquee';
+import PromoCarousel from '@/components/PromoCarousel';
 import Reveal from '@/components/Reveal';
 import ProductCard from '@/components/ProductCard';
-import PhotoFrame from '@/components/PhotoFrame';
-import TornEdge from '@/components/TornEdge';
 import UspBar from '@/components/UspBar';
-import WhyStrip from '@/components/WhyStrip';
 import { NewsletterForm } from '@/components/Forms';
 import { getDict } from '@/lib/dictionaries';
 import { getProducts } from '@/lib/products';
 import { CATEGORIES } from '@/lib/mock-data';
-import { IMAGES, imgAlt } from '@/lib/images';
+import { IMAGES, PHOTOS, imgAlt } from '@/lib/images';
 
 const REVIEWS = {
   en: [
@@ -26,39 +22,97 @@ const REVIEWS = {
   ],
 };
 
+const PROMO_META = [
+  { bg: 'var(--sage)', href: '/shop', photo: PHOTOS.pensCase },
+  { bg: 'var(--blush)', href: '/bundles', photo: PHOTOS.giftBlush },
+];
+
+function ProductRow({ id, eyebrow, title, cta, href, products, locale, dict }) {
+  return (
+    <section className="section row-section" id={id}>
+      <div className="wrap">
+        <div className="section-head">
+          <Reveal>
+            {eyebrow ? <div className="eyebrow">{eyebrow}</div> : null}
+            <h2 style={{ marginBottom: 0 }}>{title}</h2>
+          </Reveal>
+          <Link href={href} className="btn btn-ghost btn-sm">
+            {cta} <span className="arrow" aria-hidden="true">→</span>
+          </Link>
+        </div>
+        <div className="shelf">
+          {products.map((p) => (
+            <ProductCard key={p.id} product={p} locale={locale} dict={dict} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default async function Home({ params }) {
   const locale = params.locale === 'ar' ? 'ar' : 'en';
   const dict = getDict(locale);
   const products = await getProducts(locale);
-  const bestsellers = products.filter((p) => p.tags?.includes('bestseller')).slice(0, 6);
-  const shelf = bestsellers.length >= 3 ? bestsellers : products.slice(0, 6);
+  const bestsellers = products.filter((p) => p.tags?.includes('bestseller')).slice(0, 8);
+  const shelf = bestsellers.length >= 3 ? bestsellers : products.slice(0, 8);
   const newest = [...products]
     .filter((p) => p.available)
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-    .slice(0, 4);
-  const bundles = products.filter((p) => p.tags?.includes('bundle')).slice(0, 3);
+    .slice(0, 6);
+  const bundles = products.filter((p) => p.tags?.includes('bundle'));
   const reviews = REVIEWS[locale];
 
   return (
     <>
-      <HeroAssembly dict={dict} locale={locale} />
-      <TornEdge color="var(--paper)" />
-      <Marquee items={dict.marquee} />
+      <PromoCarousel dict={dict} locale={locale} />
       <UspBar dict={dict} />
 
-      {/* 1 — categories: every shelf one tap away */}
-      <section className="section" style={{ paddingTop: 'clamp(44px, 6vw, 80px)' }}>
+      {/* two wide promo tiles */}
+      <section className="section row-section">
+        <div className="wrap promo-tiles">
+          {dict.promos.map((promo, i) => {
+            const meta = PROMO_META[i];
+            return (
+              <Reveal key={i} delay={i * 0.08}>
+                <Link href={`/${locale}${meta.href}`} className="promo-tile" style={{ background: meta.bg }}>
+                  <span>
+                    <h3>{promo.title}</h3>
+                    <p>{promo.line}</p>
+                    <span className="btn btn-ink btn-sm">{promo.cta}</span>
+                  </span>
+                  <img src={meta.photo.sm || meta.photo.url} alt={imgAlt(meta.photo, locale)} loading="lazy" />
+                </Link>
+              </Reveal>
+            );
+          })}
+        </div>
+      </section>
+
+      <ProductRow
+        id="best-sellers"
+        eyebrow={dict.home.bestEyebrow}
+        title={dict.home.bestTitle}
+        cta={dict.home.viewAll}
+        href={`/${locale}/shop`}
+        products={shelf}
+        locale={locale}
+        dict={dict}
+      />
+
+      {/* category grid */}
+      <section className="section row-section">
         <div className="wrap">
           <Reveal>
             <div className="eyebrow">{dict.home.categoriesEyebrow}</div>
             <h2>{dict.home.categoriesTitle}</h2>
           </Reveal>
-          <div className="tiles tiles-5" style={{ marginTop: 26 }}>
+          <div className="tiles tiles-5" style={{ marginTop: 22 }}>
             {CATEGORIES.map((c, i) => {
               const count = products.filter((p) => c.match.includes(p.typeKey || p.productType)).length;
               const photo = IMAGES.categories[c.key];
               return (
-                <Reveal key={c.key} delay={i * 0.06}>
+                <Reveal key={c.key} delay={i * 0.05}>
                   <Link href={`/${locale}/shop?type=${encodeURIComponent(c.match[0])}`} className="tile">
                     <div className="tile-media">
                       <img src={photo.sm || photo.url} alt={imgAlt(photo, locale)} loading="lazy" />
@@ -76,76 +130,33 @@ export default async function Home({ params }) {
         </div>
       </section>
 
-      {/* 2 — best sellers */}
-      <section className="section" id="best-sellers" style={{ paddingTop: 0 }}>
-        <div className="wrap">
-          <div className="section-head">
-            <Reveal>
-              <div className="eyebrow">{dict.home.bestEyebrow}</div>
-              <h2 style={{ marginBottom: 0 }}>{dict.home.bestTitle}</h2>
-            </Reveal>
-            <Link href={`/${locale}/shop`} className="btn btn-ghost btn-sm">
-              {dict.home.viewAll} <span className="arrow" aria-hidden="true">→</span>
-            </Link>
-          </div>
-          <div className="shelf">
-            {shelf.map((p) => (
-              <ProductCard key={p.id} product={p} locale={locale} dict={dict} />
-            ))}
-          </div>
-        </div>
-      </section>
+      <ProductRow
+        eyebrow={dict.home.newEyebrow}
+        title={dict.home.newTitle}
+        cta={dict.home.viewAll}
+        href={`/${locale}/shop`}
+        products={newest}
+        locale={locale}
+        dict={dict}
+      />
 
-      {/* 3 — new arrivals */}
-      <section className="section" style={{ paddingTop: 0 }}>
-        <div className="wrap">
-          <div className="section-head">
-            <Reveal>
-              <div className="eyebrow">{dict.home.newEyebrow}</div>
-              <h2 style={{ marginBottom: 0 }}>{dict.home.newTitle}</h2>
-            </Reveal>
-            <Link href={`/${locale}/shop`} className="btn btn-ghost btn-sm">
-              {dict.home.viewAll} <span className="arrow" aria-hidden="true">→</span>
-            </Link>
-          </div>
-          <div className="shelf">
-            {newest.map((p) => (
-              <ProductCard key={p.id} product={p} locale={locale} dict={dict} />
-            ))}
-          </div>
-        </div>
-      </section>
+      <ProductRow
+        eyebrow={dict.home.bundlesEyebrow}
+        title={dict.home.bundlesTitle}
+        cta={dict.home.bundlesCta}
+        href={`/${locale}/bundles`}
+        products={bundles}
+        locale={locale}
+        dict={dict}
+      />
 
-      {/* 4 — gift sets & bundles */}
-      <section className="section" style={{ paddingTop: 0 }}>
-        <div className="wrap">
-          <div className="section-head">
-            <Reveal>
-              <div className="eyebrow">{dict.home.bundlesEyebrow}</div>
-              <h2 style={{ marginBottom: 0 }}>{dict.home.bundlesTitle}</h2>
-            </Reveal>
-            <Link href={`/${locale}/bundles`} className="btn btn-ghost btn-sm">
-              {dict.home.bundlesCta} <span className="arrow" aria-hidden="true">→</span>
-            </Link>
-          </div>
-          <div className="grid grid-3">
-            {bundles.map((p) => (
-              <ProductCard key={p.id} product={p} locale={locale} dict={dict} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 5 — why shop with us */}
-      <WhyStrip dict={dict} />
-
-      {/* 6 — reviews */}
-      <section className="section" style={{ paddingTop: 0 }}>
+      {/* reviews */}
+      <section className="section row-section">
         <div className="wrap">
           <Reveal><h2>{dict.home.reviewsTitle}</h2></Reveal>
-          <div className="cards-3" style={{ marginTop: 26 }}>
+          <div className="cards-3" style={{ marginTop: 22 }}>
             {reviews.map((r, i) => (
-              <Reveal key={i} delay={i * 0.1}>
+              <Reveal key={i} delay={i * 0.08}>
                 <div className="review">
                   <div className="stars">★★★★★</div>
                   <p>“{r.q}”</p>
@@ -157,8 +168,8 @@ export default async function Home({ params }) {
         </div>
       </section>
 
-      {/* 7 — newsletter */}
-      <section className="section" style={{ paddingTop: 0 }}>
+      {/* newsletter */}
+      <section className="section row-section">
         <div className="wrap">
           <Reveal>
             <div className="block cream grain" style={{ textAlign: 'center' }}>
@@ -169,35 +180,6 @@ export default async function Home({ params }) {
               </div>
             </div>
           </Reveal>
-        </div>
-      </section>
-
-      {/* 8 — instagram polaroids, last */}
-      <section className="section" style={{ paddingTop: 0 }}>
-        <div className="wrap">
-          <div className="section-head">
-            <Reveal><h2 style={{ marginBottom: 0 }}>{dict.home.igTitle}</h2></Reveal>
-            <a
-              href={process.env.NEXT_PUBLIC_INSTAGRAM_URL || '#'}
-              target="_blank"
-              rel="noreferrer"
-              className="btn btn-ghost btn-sm"
-            >
-              {dict.home.igHandle}
-            </a>
-          </div>
-          <div className="ig-strip">
-            {IMAGES.polaroids.map((photo, i) => (
-              <Reveal key={i} delay={i * 0.06}>
-                <PhotoFrame
-                  photo={photo}
-                  locale={locale}
-                  variant="polaroid"
-                  caption={dict.home.polaroids[i]}
-                />
-              </Reveal>
-            ))}
-          </div>
         </div>
       </section>
     </>

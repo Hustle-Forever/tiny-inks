@@ -1,13 +1,17 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useCart } from './CartContext';
+import { CATEGORIES } from '@/lib/mock-data';
 
 export default function Header({ dict, locale }) {
   const [scrolled, setScrolled] = useState(false);
   const [menu, setMenu] = useState(false);
+  const [shopOpen, setShopOpen] = useState(false);
+  const [term, setTerm] = useState('');
   const pathname = usePathname();
+  const router = useRouter();
   const cart = useCart();
 
   useEffect(() => {
@@ -17,7 +21,7 @@ export default function Header({ dict, locale }) {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  useEffect(() => { setMenu(false); }, [pathname]);
+  useEffect(() => { setMenu(false); setShopOpen(false); }, [pathname]);
 
   useEffect(() => {
     document.body.style.overflow = menu ? 'hidden' : '';
@@ -31,13 +35,13 @@ export default function Header({ dict, locale }) {
 
   const otherLocale = locale === 'ar' ? 'en' : 'ar';
   const rest = pathname.replace(/^\/(en|ar)/, '') || '';
-  const links = [
-    { href: `/${locale}`, label: dict.nav.home },
-    { href: `/${locale}/shop`, label: dict.nav.shop },
-    { href: `/${locale}/drops`, label: dict.nav.drops, dot: '01' },
-    { href: `/${locale}/about`, label: dict.nav.about },
-    { href: `/${locale}/contact`, label: dict.nav.contact },
-  ];
+
+  const submitSearch = (e) => {
+    e.preventDefault();
+    const q = term.trim();
+    setMenu(false);
+    router.push(`/${locale}/shop${q ? `?q=${encodeURIComponent(q)}` : ''}`);
+  };
 
   return (
     <header className={`header ${scrolled ? 'scrolled' : ''}`}>
@@ -48,12 +52,57 @@ export default function Header({ dict, locale }) {
         </Link>
 
         <nav className={`nav ${menu ? 'open' : ''}`} aria-label="Main">
-          {links.map((l) => (
-            <Link key={l.href} href={l.href} className={pathname === l.href ? 'active' : ''}>
-              {l.label}
-              {l.dot ? <span className="dot">{l.dot}</span> : null}
-            </Link>
-          ))}
+          <form className="nav-search" onSubmit={submitSearch} role="search">
+            <input
+              className="input"
+              type="search"
+              value={term}
+              onChange={(e) => setTerm(e.target.value)}
+              placeholder={dict.search.placeholder}
+              aria-label={dict.search.label}
+            />
+          </form>
+
+          <Link href={`/${locale}`} className={pathname === `/${locale}` ? 'active' : ''}>
+            {dict.nav.home}
+          </Link>
+
+          <div className={`dropdown-wrap ${shopOpen ? 'open' : ''}`}>
+            <div className="nav-shop-row">
+              <Link
+                href={`/${locale}/shop`}
+                className={`nav-shop ${pathname.startsWith(`/${locale}/shop`) ? 'active' : ''}`}
+              >
+                {dict.nav.shop}
+              </Link>
+              <button
+                className="acc-toggle"
+                onClick={() => setShopOpen((v) => !v)}
+                aria-expanded={shopOpen}
+                aria-label={dict.nav.shop}
+              >
+                ▾
+              </button>
+            </div>
+            <div className="dropdown">
+              <Link href={`/${locale}/shop`}>{dict.nav.allProducts}</Link>
+              {CATEGORIES.map((c) => (
+                <Link key={c.key} href={`/${locale}/shop?type=${encodeURIComponent(c.match[0])}`}>
+                  {locale === 'ar' ? c.ar : c.en}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <Link href={`/${locale}/bundles`} className={pathname === `/${locale}/bundles` ? 'active' : ''}>
+            {dict.nav.drops}
+          </Link>
+          <Link href={`/${locale}/about`} className={pathname === `/${locale}/about` ? 'active' : ''}>
+            {dict.nav.about}
+          </Link>
+          <Link href={`/${locale}/contact`} className={pathname === `/${locale}/contact` ? 'active' : ''}>
+            {dict.nav.contact}
+          </Link>
         </nav>
 
         <div className="header-actions">

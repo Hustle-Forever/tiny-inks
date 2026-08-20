@@ -4,7 +4,7 @@ Custom Next.js storefront for **Tiny Inks** (تايني انكس للقرطاس�
 built on the brand palette extracted from the logo, with Shopify as the backend for
 products, cart, checkout, and order management.
 
-**Pages:** Home · Shop (with filters) · Tiny Drops · About · Contact · Product pages · Cart drawer · Cart page · Policies (privacy / terms / shipping / returns) · FAQ
+**Pages:** Home · Shop (filters + search) · Gift Sets & Bundles · About · Contact · Product pages · Cart drawer · Cart page · Policies (privacy / terms / shipping / returns) · FAQ
 
 ---
 
@@ -38,7 +38,7 @@ For every product in Shopify admin:
 - **Tags**:
   - `color:blue` / `color:terracotta` / `color:cream` / `color:blush` / `color:mustard` / `color:sage` / `color:slate` / `color:ink` → powers the color filter.
   - `bestseller` → shows the badge + appears in the home Bestsellers shelf.
-  - `drop-01` → the product appears on the **Tiny Drops** page with the Drop badge.
+  - `bundle` → the product appears on the **Gift Sets & Bundles** page (product type `Gift Sets`) with the Gift set badge.
 - **Images**: upload at least 2 per product (the second one shows on hover).
 - Set price, inventory, and shipping as normal.
 
@@ -83,7 +83,6 @@ payments, and orders in the admin) are now live.
 | What | Where |
 |---|---|
 | WhatsApp number, Instagram, email | `.env.local` (`NEXT_PUBLIC_WHATSAPP_NUMBER` etc.) |
-| Drop 01 countdown date | `NEXT_PUBLIC_DROP_DATE` in `.env.local` |
 | Site URL (SEO/sitemap) | `NEXT_PUBLIC_SITE_URL` in `.env.local` |
 | **All photos on the site** | **`lib/images.js` — one file, see below** |
 | All wording (EN + AR) | `lib/dictionaries.js` |

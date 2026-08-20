@@ -15,7 +15,7 @@ export default function Footer({ dict, locale }) {
         <div>
           <h3>{dict.footer.shop}</h3>
           <Link href={`/${locale}/shop`}>{dict.nav.shop}</Link>
-          <Link href={`/${locale}/drops`}>{dict.nav.drops}</Link>
+          <Link href={`/${locale}/bundles`}>{dict.nav.drops}</Link>
           <Link href={`/${locale}/about`}>{dict.nav.about}</Link>
         </div>
         <div>

@@ -4,9 +4,9 @@ import TiltedCard from './reactbits/TiltedCard/TiltedCard';
 import useReducedMotion from './reactbits/useReducedMotion';
 import { IMAGES, imgAlt } from '@/lib/images';
 
-/* Editorial photo in its cream mat, with a very gentle React Bits tilt
-   on pointer — plain image on touch devices and under reduced motion. */
-export default function EditorialPhoto({ locale }) {
+/* Photo in a cream mat with a very gentle React Bits tilt on pointer —
+   plain image on touch devices and under reduced motion. */
+export default function EditorialPhoto({ locale, photo: photoProp }) {
   const reduced = useReducedMotion();
   // tilt only on wide pointer devices: never on touch, never on phones
   const [tiltOk, setTiltOk] = useState(false);
@@ -17,7 +17,7 @@ export default function EditorialPhoto({ locale }) {
     mq.addEventListener('change', update);
     return () => mq.removeEventListener('change', update);
   }, []);
-  const photo = IMAGES.editorial;
+  const photo = photoProp || IMAGES.editorial;
   const tilt = reduced === false && tiltOk;
 
   return (

@@ -3,9 +3,11 @@ import { Fraunces, Karla, El_Messiri, IBM_Plex_Sans_Arabic } from 'next/font/goo
 import { getDict, LOCALES } from '@/lib/dictionaries';
 import { SITE_URL } from '@/lib/site';
 import { CartProvider } from '@/components/CartContext';
+import { WishlistProvider } from '@/components/WishlistContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CartDrawer from '@/components/CartDrawer';
+import BottomNav from '@/components/BottomNav';
 
 const fraunces = Fraunces({
   subsets: ['latin'],
@@ -78,10 +80,13 @@ export default function LocaleLayout({ children, params }) {
           {locale === 'ar' ? 'تخطَّ إلى المحتوى' : 'Skip to content'}
         </a>
         <CartProvider>
-          <Header dict={dict} locale={locale} />
-          <main id="content">{children}</main>
-          <Footer dict={dict} locale={locale} />
-          <CartDrawer dict={dict} locale={locale} />
+          <WishlistProvider>
+            <Header dict={dict} locale={locale} />
+            <main id="content">{children}</main>
+            <Footer dict={dict} locale={locale} />
+            <CartDrawer dict={dict} locale={locale} />
+            <BottomNav dict={dict} locale={locale} />
+          </WishlistProvider>
         </CartProvider>
       </body>
     </html>

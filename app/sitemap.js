@@ -3,7 +3,7 @@ import { getProducts } from '@/lib/products';
 import { POLICY_SLUGS } from '@/content/policies';
 import { LOCALES } from '@/lib/dictionaries';
 
-const STATIC_PATHS = ['', '/shop', '/drops', '/about', '/contact', '/faq', '/cart'];
+const STATIC_PATHS = ['', '/shop', '/bundles', '/about', '/contact', '/faq', '/cart'];
 
 export default async function sitemap() {
   const now = new Date();
@@ -14,7 +14,7 @@ export default async function sitemap() {
       entries.push({
         url: `${SITE_URL}/${locale}${path}`,
         lastModified: now,
-        changeFrequency: path === '' || path === '/shop' || path === '/drops' ? 'weekly' : 'monthly',
+        changeFrequency: path === '' || path === '/shop' || path === '/bundles' ? 'weekly' : 'monthly',
         priority: path === '' ? 1 : path === '/shop' ? 0.9 : 0.6,
       });
     }

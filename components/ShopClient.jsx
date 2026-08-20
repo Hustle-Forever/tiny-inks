@@ -10,6 +10,7 @@ export default function ShopClient({ products, dict, locale }) {
   // server never sees the query string in production
   const searchParams = useSearchParams();
   const [type, setType] = useState(() => searchParams.get('type') || 'all');
+  const [query, setQuery] = useState(() => searchParams.get('q') || '');
   const [color, setColor] = useState('all');
   const [price, setPrice] = useState('all');
   const [sort, setSort] = useState('featured');
@@ -33,7 +34,9 @@ export default function ShopClient({ products, dict, locale }) {
   const colorLabel = (c) => (COLOR_NAMES[locale] && COLOR_NAMES[locale][c]) || c;
 
   const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
     let list = products.filter((p) => {
+      if (q && !`${p.title} ${p.productType}`.toLowerCase().includes(q)) return false;
       if (type !== 'all' && typeOf(p) !== type) return false;
       if (color !== 'all' && p.color !== color) return false;
       if (price === 'under50' && p.price >= 50) return false;
@@ -50,7 +53,7 @@ export default function ShopClient({ products, dict, locale }) {
       );
     }
     return list;
-  }, [products, type, color, price, sort]);
+  }, [products, type, color, price, sort, query]);
 
   const activeCount = (type !== 'all' ? 1 : 0) + (color !== 'all' ? 1 : 0) + (price !== 'all' ? 1 : 0);
   const hasFilters = activeCount > 0;
@@ -118,6 +121,16 @@ export default function ShopClient({ products, dict, locale }) {
       </aside>
 
       <div>
+        <div className="shop-search">
+          <input
+            type="search"
+            className="input"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder={dict.search.placeholder}
+            aria-label={dict.search.label}
+          />
+        </div>
         <div className="shop-toolbar">
           <span className="result-count" aria-live="polite">{filtered.length} {t.results}</span>
           <div className="toolbar-actions">

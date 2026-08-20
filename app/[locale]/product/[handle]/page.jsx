@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Reveal from '@/components/Reveal';
 import Gallery from '@/components/Gallery';
@@ -58,13 +59,35 @@ export default async function ProductPage({ params }) {
           <div className="pdp-buy">
             <div className="card-type">{product.productType}</div>
             <h1 style={{ fontSize: 'clamp(1.9rem, 4vw, 3rem)' }}>{product.title}</h1>
-            <div className="pdp-price">{formatPrice(product.price, product.currency, locale)}</div>
+            <div className="pdp-price-row">
+              <div className="pdp-price">{formatPrice(product.price, product.currency, locale)}</div>
+              <div className={`card-stock ${product.available ? 'in' : 'out'}`}>
+                <span className="stock-dot" aria-hidden="true" />
+                {product.available ? dict.product.instock : dict.product.soldout}
+              </div>
+            </div>
             <AddToCart product={product} dict={dict} />
-            <p className="lede" style={{ fontSize: '1.02rem' }}>{product.description}</p>
             <div className="pdp-meta">
               <div><strong>{dict.product.shipping}:</strong> {dict.product.shippingText}</div>
               <div><strong>{dict.product.wrap}:</strong> {dict.product.wrapText}</div>
+              <div>
+                <Link href={`/${locale}/policies/returns`} className="pdp-link">
+                  {dict.product.returnsLink}
+                </Link>
+              </div>
             </div>
+            <div className="pdp-bulk">
+              <strong>{dict.product.bulk}</strong>
+              <a
+                href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '971500000000'}`}
+                target="_blank"
+                rel="noreferrer"
+                className="btn btn-ghost btn-sm"
+              >
+                {dict.product.bulkCta}
+              </a>
+            </div>
+            <p className="lede" style={{ fontSize: '1.02rem' }}>{product.description}</p>
           </div>
         </div>
       </section>

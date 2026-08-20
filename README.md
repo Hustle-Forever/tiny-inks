@@ -28,7 +28,7 @@ works before Shopify exists. The cart works locally; only real checkout is disab
 
 ### A. Create the store
 1. Go to shopify.com → start a store (trial is fine to begin).
-2. In **Settings → General**, set currency to **AED** and address to Dubai.
+2. In **Settings → General**, set currency to **AED** and address to Abu Dhabi.
 3. In **Settings → Markets**, make sure **United Arab Emirates** is your main market.
 
 ### B. Add products — follow these conventions (important!)
@@ -67,7 +67,7 @@ payments, and orders in the admin) are now live.
 
 ### F. Payments & shipping (in Shopify admin)
 - **Settings → Payments**: activate Shopify Payments (available in the UAE) or your preferred gateway; consider adding Tabby/Tamara later.
-- **Settings → Shipping**: create a Dubai zone (1–2 days) and a UAE zone, with free shipping over AED 150 to match the site's marquee (or edit the marquee text in `lib/dictionaries.js`).
+- **Settings → Shipping**: create a Abu Dhabi zone (1–2 days) and a UAE zone, with free shipping over AED 150 to match the site's marquee (or edit the marquee text in `lib/dictionaries.js`).
 
 ---
 

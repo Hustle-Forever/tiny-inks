@@ -7,7 +7,7 @@ const terms = {
       {
         h: 'About these terms',
         ps: [
-          'These terms govern your use of tinyinks.ae and any purchase you make from Tiny Inks ([LEGAL BUSINESS NAME], trade license no. [TRADE LICENSE NO.], [ADDRESS], Dubai, UAE). By placing an order you agree to them.',
+          'These terms govern your use of tinyinks.ae and any purchase you make from Tiny Inks ([LEGAL BUSINESS NAME], trade license no. [TRADE LICENSE NO.], [ADDRESS], Abu Dhabi, UAE). By placing an order you agree to them.',
         ],
       },
       {
@@ -40,7 +40,7 @@ const terms = {
         h: 'Liability & governing law',
         ps: [
           'Nothing in these terms limits rights you have under UAE consumer protection law. Our liability for any order is limited to the amount you paid for it.',
-          'These terms are governed by the laws of the United Arab Emirates, and any dispute is subject to the courts of Dubai.',
+          'These terms are governed by the laws of the United Arab Emirates, and any dispute is subject to the courts of Abu Dhabi.',
         ],
       },
       {
@@ -55,7 +55,7 @@ const terms = {
       {
         h: 'عن هذه الشروط',
         ps: [
-          'تنظم هذه الشروط استخدامك لموقع tinyinks.ae وأي عملية شراء من تايني انكس ([LEGAL BUSINESS NAME]، رخصة تجارية رقم [TRADE LICENSE NO.]، [ADDRESS]، دبي، الإمارات). بتقديم طلبك فأنت توافق عليها.',
+          'تنظم هذه الشروط استخدامك لموقع tinyinks.ae وأي عملية شراء من تايني انكس ([LEGAL BUSINESS NAME]، رخصة تجارية رقم [TRADE LICENSE NO.]، [ADDRESS]، أبوظبي، الإمارات). بتقديم طلبك فأنت توافق عليها.',
         ],
       },
       {
@@ -88,7 +88,7 @@ const terms = {
         h: 'المسؤولية والقانون المنظم',
         ps: [
           'لا شيء في هذه الشروط يحد من حقوقك بموجب قانون حماية المستهلك الإماراتي. وتقتصر مسؤوليتنا عن أي طلب على المبلغ المدفوع فيه.',
-          'تخضع هذه الشروط لقوانين دولة الإمارات العربية المتحدة، وتختص محاكم دبي بأي نزاع.',
+          'تخضع هذه الشروط لقوانين دولة الإمارات العربية المتحدة، وتختص محاكم أبوظبي بأي نزاع.',
         ],
       },
       {

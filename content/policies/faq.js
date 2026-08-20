@@ -5,11 +5,11 @@ const faq = {
     items: [
       {
         q: 'How fast will my order arrive?',
-        a: 'Dubai: 1–2 business days. Other Emirates: 2–4 business days. Orders placed before 2pm on a business day usually ship the same day.',
+        a: 'Abu Dhabi: 1–2 business days. Other Emirates: 2–4 business days. Orders placed before 2pm on a business day usually ship the same day.',
       },
       {
         q: 'How much is delivery?',
-        a: 'Free in Dubai over AED 150 (AED 20 below that). Other Emirates: flat AED 25, free over AED 250.',
+        a: 'Free in Abu Dhabi over AED 150 (AED 20 below that). Other Emirates: flat AED 25, free over AED 250.',
       },
       {
         q: 'Is gift wrapping really free?',
@@ -42,11 +42,11 @@ const faq = {
     items: [
       {
         q: 'متى يصل طلبي؟',
-        a: 'دبي: ١–٢ يوم عمل. بقية الإمارات: ٢–٤ أيام عمل. الطلبات قبل الساعة ٢ ظهرًا في أيام العمل تُشحن عادة في اليوم نفسه.',
+        a: 'أبوظبي: ١–٢ يوم عمل. بقية الإمارات: ٢–٤ أيام عمل. الطلبات قبل الساعة ٢ ظهرًا في أيام العمل تُشحن عادة في اليوم نفسه.',
       },
       {
         q: 'كم تكلفة التوصيل؟',
-        a: 'مجاني في دبي للطلبات فوق ١٥٠ درهمًا (و٢٠ درهمًا لما دون ذلك). بقية الإمارات: ٢٥ درهمًا، ومجاني فوق ٢٥٠ درهمًا.',
+        a: 'مجاني في أبوظبي للطلبات فوق ١٥٠ درهمًا (و٢٠ درهمًا لما دون ذلك). بقية الإمارات: ٢٥ درهمًا، ومجاني فوق ٢٥٠ درهمًا.',
       },
       {
         q: 'هل تغليف الهدايا مجاني فعلًا؟',

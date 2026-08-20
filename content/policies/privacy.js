@@ -7,7 +7,7 @@ const privacy = {
       {
         h: 'Who we are',
         ps: [
-          'Tiny Inks ([LEGAL BUSINESS NAME], trade license no. [TRADE LICENSE NO.]) is a stationery studio based in Dubai, United Arab Emirates, located at [ADDRESS]. This policy explains what personal information we collect through tinyinks.ae and how we use it.',
+          'Tiny Inks ([LEGAL BUSINESS NAME], trade license no. [TRADE LICENSE NO.]) is a stationery studio based in Abu Dhabi, United Arab Emirates, located at [ADDRESS]. This policy explains what personal information we collect through tinyinks.ae and how we use it.',
         ],
       },
       {
@@ -52,7 +52,7 @@ const privacy = {
       {
         h: 'من نحن',
         ps: [
-          'تايني انكس ([LEGAL BUSINESS NAME]، رخصة تجارية رقم [TRADE LICENSE NO.]) ستوديو قرطاسية مقره دبي، الإمارات العربية المتحدة، وعنوانه [ADDRESS]. توضح هذه السياسة المعلومات الشخصية التي نجمعها عبر tinyinks.ae وكيفية استخدامها.',
+          'تايني انكس ([LEGAL BUSINESS NAME]، رخصة تجارية رقم [TRADE LICENSE NO.]) ستوديو قرطاسية مقره أبوظبي، الإمارات العربية المتحدة، وعنوانه [ADDRESS]. توضح هذه السياسة المعلومات الشخصية التي نجمعها عبر tinyinks.ae وكيفية استخدامها.',
         ],
       },
       {

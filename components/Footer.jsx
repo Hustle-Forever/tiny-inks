@@ -47,7 +47,7 @@ export default function Footer({ dict, locale }) {
         </div>
       </div>
       <div className="wrap footer-bottom">
-        <span>© {new Date().getFullYear()} Tiny Inks · Dubai</span>
+        <span>© {new Date().getFullYear()} Tiny Inks · Abu Dhabi</span>
         <span>{dict.footer.rights}</span>
       </div>
     </footer>

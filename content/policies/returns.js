@@ -26,7 +26,7 @@ const returns = {
       {
         h: 'How to start a return',
         ps: [
-          'Message us on WhatsApp or email [EMAIL] with your order number and a photo of the item. We will arrange collection from your address in Dubai, or guide you to the nearest drop-off option in other Emirates.',
+          'Message us on WhatsApp or email [EMAIL] with your order number and a photo of the item. We will arrange collection from your address in Abu Dhabi, or guide you to the nearest drop-off option in other Emirates.',
           'Refunds are issued to the original payment method within 5–7 business days of the item reaching our studio.',
         ],
       },
@@ -63,7 +63,7 @@ const returns = {
       {
         h: 'كيف تبدأ الاسترجاع',
         ps: [
-          'راسلنا على واتساب أو عبر البريد [EMAIL] مع رقم الطلب وصورة المنتج. سنرتب الاستلام من عنوانك في دبي، أو نرشدك لأقرب نقطة تسليم في بقية الإمارات.',
+          'راسلنا على واتساب أو عبر البريد [EMAIL] مع رقم الطلب وصورة المنتج. سنرتب الاستلام من عنوانك في أبوظبي، أو نرشدك لأقرب نقطة تسليم في بقية الإمارات.',
           'يُرد المبلغ إلى وسيلة الدفع الأصلية خلال ٥–٧ أيام عمل من وصول المنتج إلى الستوديو.',
         ],
       },

@@ -7,14 +7,14 @@ const shipping = {
       {
         h: 'Delivery times',
         ps: [
-          'Orders within Dubai are delivered in 1–2 business days. Orders to the other Emirates (Abu Dhabi, Sharjah, Ajman, Umm Al Quwain, Ras Al Khaimah, Fujairah) arrive in 2–4 business days.',
-          'Orders placed before 2pm (Dubai time) on a business day are usually dispatched the same day. Orders placed on Friday afternoon or Saturday are dispatched on Sunday.',
+          'Orders within Abu Dhabi are delivered in 1–2 business days. Orders to the other Emirates (Dubai, Sharjah, Ajman, Umm Al Quwain, Ras Al Khaimah, Fujairah) arrive in 2–4 business days.',
+          'Orders placed before 2pm (Abu Dhabi time) on a business day are usually dispatched the same day. Orders placed on Friday afternoon or Saturday are dispatched on Sunday.',
         ],
       },
       {
         h: 'Delivery fees',
         ps: [
-          'Delivery within Dubai is FREE for orders over AED 150. Below that, a flat AED 20 delivery fee applies.',
+          'Delivery within Abu Dhabi is FREE for orders over AED 150. Below that, a flat AED 20 delivery fee applies.',
           'Delivery to other Emirates is charged at a flat AED 25, free for orders over AED 250.',
         ],
       },
@@ -51,14 +51,14 @@ const shipping = {
       {
         h: 'مدة التوصيل',
         ps: [
-          'الطلبات داخل دبي تصل خلال ١–٢ يوم عمل. والطلبات إلى بقية الإمارات (أبوظبي، الشارقة، عجمان، أم القيوين، رأس الخيمة، الفجيرة) تصل خلال ٢–٤ أيام عمل.',
-          'الطلبات المقدمة قبل الساعة ٢ ظهرًا (بتوقيت دبي) في أيام العمل تُشحن عادة في اليوم نفسه. وطلبات بعد ظهر الجمعة والسبت تُشحن يوم الأحد.',
+          'الطلبات داخل أبوظبي تصل خلال ١–٢ يوم عمل. والطلبات إلى بقية الإمارات (دبي، الشارقة، عجمان، أم القيوين، رأس الخيمة، الفجيرة) تصل خلال ٢–٤ أيام عمل.',
+          'الطلبات المقدمة قبل الساعة ٢ ظهرًا (بتوقيت أبوظبي) في أيام العمل تُشحن عادة في اليوم نفسه. وطلبات بعد ظهر الجمعة والسبت تُشحن يوم الأحد.',
         ],
       },
       {
         h: 'رسوم التوصيل',
         ps: [
-          'التوصيل داخل دبي مجاني للطلبات التي تتجاوز ١٥٠ درهمًا. وما دون ذلك تطبق رسوم ثابتة قدرها ٢٠ درهمًا.',
+          'التوصيل داخل أبوظبي مجاني للطلبات التي تتجاوز ١٥٠ درهمًا. وما دون ذلك تطبق رسوم ثابتة قدرها ٢٠ درهمًا.',
           'التوصيل إلى بقية الإمارات برسوم ثابتة قدرها ٢٥ درهمًا، ومجاني للطلبات فوق ٢٥٠ درهمًا.',
         ],
       },

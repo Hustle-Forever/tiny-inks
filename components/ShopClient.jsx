@@ -7,7 +7,14 @@ import { COLOR_SWATCHES, COLOR_NAMES } from '@/lib/mock-data';
 
 const PER_PAGE_OPTIONS = [12, 24, 48];
 
-export default function ShopClient({ products, dict, locale }) {
+export default function ShopClient({
+  products,
+  dict,
+  locale,
+  collections = [],
+  currentCollection = null,
+  collectionTitle = null,
+}) {
   const t = dict.shop;
   const tu = dict.shopUi;
   const router = useRouter();
@@ -130,13 +137,18 @@ export default function ShopClient({ products, dict, locale }) {
       <div className="filter-group">
         <h4>{tu.categories}</h4>
         <div className="cat-list">
-          <button className={`cat-link ${type === 'all' ? 'on' : ''}`} onClick={() => setType('all')}>
+          {/* collection links — driven by Shopify (demo: mock categories) */}
+          <Link href={`/${locale}/shop`} className={`cat-link ${!currentCollection ? 'on' : ''}`}>
             {t.all}
-          </button>
-          {types.map((x) => (
-            <button key={x.key} className={`cat-link ${type === x.key ? 'on' : ''}`} onClick={() => setType(x.key)}>
-              {x.label} <span>{x.count}</span>
-            </button>
+          </Link>
+          {collections.map((c) => (
+            <Link
+              key={c.handle}
+              href={`/${locale}/shop/${c.handle}`}
+              className={`cat-link ${currentCollection === c.handle ? 'on' : ''}`}
+            >
+              {c.title} {typeof c.count === 'number' ? <span>{c.count}</span> : null}
+            </Link>
           ))}
         </div>
       </div>
@@ -201,13 +213,13 @@ export default function ShopClient({ products, dict, locale }) {
       <nav className="breadcrumb" aria-label="Breadcrumb">
         <Link href={`/${locale}`}>{dict.nav.home}</Link>
         <span aria-hidden="true">/</span>
-        {type === 'all' ? (
+        {!currentCollection ? (
           <span aria-current="page">{tu.breadcrumbShop}</span>
         ) : (
           <>
             <Link href={`/${locale}/shop`}>{tu.breadcrumbShop}</Link>
             <span aria-hidden="true">/</span>
-            <span aria-current="page">{typeLabel(type)}</span>
+            <span aria-current="page">{collectionTitle}</span>
           </>
         )}
       </nav>
@@ -215,7 +227,7 @@ export default function ShopClient({ products, dict, locale }) {
       {/* count + sort + per-page on one line */}
       <div className="shop-toolbar">
         <span className="result-count" aria-live="polite">
-          <strong>{filtered.length}</strong> {tu.itemsIn} {type === 'all' ? tu.breadcrumbShop : typeLabel(type)}
+          <strong>{filtered.length}</strong> {tu.itemsIn} {collectionTitle || tu.breadcrumbShop}
         </span>
         <div className="toolbar-actions">
           <label className="perpage-label">

@@ -1,7 +1,6 @@
 import Link from 'next/link';
-import { CATEGORIES } from '@/lib/mock-data';
 
-export default function Footer({ dict, locale }) {
+export default function Footer({ dict, locale, collections = [] }) {
   const ig = process.env.NEXT_PUBLIC_INSTAGRAM_URL || '#';
   const email = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'hello@tinyinks.ae';
   const wa = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '971500000000';
@@ -37,9 +36,9 @@ export default function Footer({ dict, locale }) {
         <div>
           <h3>{dict.footer.shop}</h3>
           <Link href={`/${locale}/shop`}>{dict.nav.allProducts}</Link>
-          {CATEGORIES.slice(0, 3).map((c) => (
-            <Link key={c.key} href={`/${locale}/shop?type=${encodeURIComponent(c.match[0])}`}>
-              {locale === 'ar' ? c.ar : c.en}
+          {collections.slice(0, 4).map((c) => (
+            <Link key={c.handle} href={`/${locale}/shop/${c.handle}`}>
+              {c.title}
             </Link>
           ))}
           <Link href={`/${locale}/bundles`}>{dict.nav.drops}</Link>

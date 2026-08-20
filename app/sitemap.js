@@ -1,5 +1,5 @@
 import { SITE_URL } from '@/lib/site';
-import { getProducts } from '@/lib/products';
+import { getProducts, getCollections } from '@/lib/products';
 import { POLICY_SLUGS } from '@/content/policies';
 import { LOCALES } from '@/lib/dictionaries';
 
@@ -26,6 +26,22 @@ export default async function sitemap() {
         priority: 0.3,
       });
     }
+  }
+
+  try {
+    const collections = await getCollections('en');
+    for (const c of collections) {
+      for (const locale of LOCALES) {
+        entries.push({
+          url: `${SITE_URL}/${locale}/shop/${c.handle}`,
+          lastModified: now,
+          changeFrequency: 'weekly',
+          priority: 0.7,
+        });
+      }
+    }
+  } catch {
+    /* collections unavailable — static routes still listed */
   }
 
   try {

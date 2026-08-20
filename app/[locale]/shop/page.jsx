@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import ShopClient from '@/components/ShopClient';
 import { getDict } from '@/lib/dictionaries';
-import { getProducts } from '@/lib/products';
+import { getProducts, getCollections } from '@/lib/products';
 
 export async function generateMetadata({ params }) {
   const dict = getDict(params.locale);
@@ -11,14 +11,28 @@ export async function generateMetadata({ params }) {
 export default async function ShopPage({ params }) {
   const locale = params.locale === 'ar' ? 'ar' : 'en';
   const dict = getDict(locale);
-  const products = await getProducts(locale);
+  const [products, collections] = await Promise.all([
+    getProducts(locale),
+    getCollections(locale),
+  ]);
+  /* SAFETY NET: this page always lists getProducts() — every product,
+     whether or not it belongs to any collection. Counts are informational. */
+  const withCounts = collections.map((c) => ({
+    ...c,
+    count: products.filter((p) => p.collections?.includes(c.handle)).length,
+  }));
 
   return (
     <section className="section" style={{ paddingTop: 'clamp(18px, 3vw, 34px)' }}>
       <div className="wrap">
         <h1 className="shop-h1">{dict.shop.title}</h1>
         <Suspense>
-          <ShopClient products={products} dict={dict} locale={locale} />
+          <ShopClient
+            products={products}
+            dict={dict}
+            locale={locale}
+            collections={withCounts}
+          />
         </Suspense>
       </div>
     </section>

@@ -4,9 +4,8 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCart } from './CartContext';
 import { useWishlist } from './WishlistContext';
-import { CATEGORIES } from '@/lib/mock-data';
 
-export default function Header({ dict, locale }) {
+export default function Header({ dict, locale, collections = [] }) {
   const [menu, setMenu] = useState(false);
   const [catsOpen, setCatsOpen] = useState(false);
   const [announceIdx, setAnnounceIdx] = useState(0);
@@ -57,13 +56,13 @@ export default function Header({ dict, locale }) {
     router.push(`/${locale}/shop${q ? `?q=${encodeURIComponent(q)}` : ''}`);
   };
 
+  /* categories come from Shopify collections (demo mode: mock categories) */
   const catLinks = [
     { href: `/${locale}/shop`, label: dict.nav.allProducts },
-    ...CATEGORIES.map((c) => ({
-      href: `/${locale}/shop?type=${encodeURIComponent(c.match[0])}`,
-      label: locale === 'ar' ? c.ar : c.en,
+    ...collections.map((c) => ({
+      href: `/${locale}/shop/${c.handle}`,
+      label: c.title,
     })),
-    { href: `/${locale}/bundles`, label: dict.nav.drops },
     { href: `https://wa.me/${wa}?text=${encodeURIComponent(dict.footerUi.bulkMsg)}`, label: dict.nav.bulk, external: true },
   ];
 

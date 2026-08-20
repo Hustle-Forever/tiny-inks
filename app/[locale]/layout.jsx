@@ -1,6 +1,7 @@
 import '../globals.css';
 import { Fraunces, Karla, El_Messiri, IBM_Plex_Sans_Arabic } from 'next/font/google';
 import { getDict, LOCALES } from '@/lib/dictionaries';
+import { getCollections } from '@/lib/products';
 import { SITE_URL } from '@/lib/site';
 import { CartProvider } from '@/components/CartContext';
 import { WishlistProvider } from '@/components/WishlistContext';
@@ -64,10 +65,11 @@ export async function generateMetadata({ params }) {
 
 export const viewport = { themeColor: '#FBF0E4' };
 
-export default function LocaleLayout({ children, params }) {
+export default async function LocaleLayout({ children, params }) {
   const locale = LOCALES.includes(params.locale) ? params.locale : 'en';
   const dict = getDict(locale);
   const dir = locale === 'ar' ? 'rtl' : 'ltr';
+  const collections = await getCollections(locale);
 
   return (
     <html
@@ -81,9 +83,9 @@ export default function LocaleLayout({ children, params }) {
         </a>
         <CartProvider>
           <WishlistProvider>
-            <Header dict={dict} locale={locale} />
+            <Header dict={dict} locale={locale} collections={collections} />
             <main id="content">{children}</main>
-            <Footer dict={dict} locale={locale} />
+            <Footer dict={dict} locale={locale} collections={collections} />
             <CartDrawer dict={dict} locale={locale} />
             <BottomNav dict={dict} locale={locale} />
           </WishlistProvider>

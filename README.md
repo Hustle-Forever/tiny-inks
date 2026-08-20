@@ -32,15 +32,64 @@ works before Shopify exists. The cart works locally; only real checkout is disab
 3. In **Settings → Markets**, make sure **United Arab Emirates** is your main market.
 
 ### B. Add products — follow these conventions (important!)
-For every product in Shopify admin:
-- **Product type** — use exactly one of: `Notebooks`, `Journals`, `Planners`, `Pens & Tools`, `Desk & Notes`
-  (these power the Shop filter and the home-page category tiles).
-- **Tags**:
-  - `color:blue` / `color:terracotta` / `color:cream` / `color:blush` / `color:mustard` / `color:sage` / `color:slate` / `color:ink` → powers the color filter.
-  - `bestseller` → shows the badge + appears in the home Bestsellers shelf.
-  - `bundle` → the product appears on the **Gift Sets & Bundles** page (product type `Gift Sets`) with the Gift set badge.
-- **Images**: upload at least 2 per product (the second one shows on hover).
-- Set price, inventory, and shipping as normal.
+
+**The site's categories are your Shopify COLLECTIONS.** The header menu, the
+home category grid, and the shop sidebar all read collections straight from the
+store — add, rename, or remove a collection in Shopify and the site follows,
+no code changes ever.
+
+#### B1. Create the collections (once)
+Shopify admin → **Products → Collections → Create collection**, type
+**Automated**, with these handles and rules (handle = the URL slug, shown under
+the title field):
+
+| Collection title | Handle | Automated rule |
+|---|---|---|
+| Notebooks | `notebooks` | Product type equals `Notebooks` |
+| Journals | `journals` | Product type equals `Journals` |
+| Planners | `planners` | Product type equals `Planners` |
+| Pens & Tools | `pens-tools` | Product type equals `Pens & Tools` |
+| Desk & Notes | `desk-notes` | Product type equals `Desk & Notes` |
+| Gift Sets | `gift-sets` | Product tag equals `bundle` |
+
+Give each collection an **image** (it becomes the category tile photo).
+You can add more collections any time — they appear on the site automatically.
+A product in **no** collection still shows in **All Products** and in search —
+nothing ever becomes invisible — but give every product a type so it lands in
+a category page too.
+
+#### B2. Bulk import with CSV (fastest way to load the catalog)
+1. Shopify admin → **Products → Import** → upload a CSV.
+2. Start from Shopify's sample CSV (linked in the import dialog) and fill
+   **exactly these columns** (leave others empty):
+
+   `Handle` · `Title` · `Body (HTML)` · `Vendor` (Tiny Inks) ·
+   `Type` (one of the six types above) · `Tags` (see B3) ·
+   `Published` (TRUE) · `Variant Price` · `Variant Compare At Price`
+   (ONLY if there is a real old price — the site shows a strike-through
+   automatically; never fake it) · `Variant Inventory Qty` ·
+   `Variant Inventory Tracker` (shopify) · `Image Src` (public image URL) ·
+   `Image Position` (1, 2, …) · `Image Alt Text` · `Status` (active)
+
+   One row per product; add extra rows with the same `Handle` and only
+   `Image Src`/`Image Position` filled for additional images (upload **at
+   least 2** — the second shows on hover).
+3. Import, then run `node scripts/catalog-check.mjs` (see B4).
+
+#### B3. Tag conventions
+- `color:blue` / `color:terracotta` / `color:cream` / `color:blush` /
+  `color:mustard` / `color:sage` / `color:slate` / `color:ink` → powers the
+  color filter swatches (no tag = no swatch, nothing breaks).
+- `bestseller` → badge + home Best sellers row.
+- `bundle` → Gift Sets collection + the Gift Sets & Bundles page + badge.
+
+#### B4. Check your catalog health
+```bash
+node scripts/catalog-check.mjs
+```
+Prints every product that is missing images, a price, a product type, a
+collection, or an Arabic translation — fix them in Shopify admin, rerun until
+it says all good.
 
 ### C. Get the Storefront API token
 1. Shopify admin → **Sales channels → add the "Headless" channel** (free, by Shopify).

@@ -390,12 +390,10 @@ h1 em, h2 em { color: var(--terracotta); }
 
 /* ---------- tiles / shelves ---------- */
 .tiles { display: grid; gap: 18px; grid-template-columns: repeat(4, 1fr); }
-.tiles-5 { grid-template-columns: repeat(5, 1fr); }
-@media (max-width: 980px) { .tiles, .tiles-5 { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 768px) {
-  .tiles-5 > :last-child { grid-column: span 2; }
-  .tiles-5 > :last-child .tile-media { border-radius: 90px 90px 14px 14px; }
-}
+/* collection grid adapts to however many collections the owner creates */
+.tiles-cats { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+@media (max-width: 980px) { .tiles { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 768px) { .tiles-cats { grid-template-columns: repeat(2, 1fr); } }
 
 /* why shop with us */
 .why-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }

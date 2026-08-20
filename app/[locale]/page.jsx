@@ -5,9 +5,11 @@ import ProductCard from '@/components/ProductCard';
 import UspBar from '@/components/UspBar';
 import { NewsletterForm } from '@/components/Forms';
 import { getDict } from '@/lib/dictionaries';
-import { getProducts } from '@/lib/products';
-import { CATEGORIES } from '@/lib/mock-data';
-import { IMAGES, PHOTOS, imgAlt } from '@/lib/images';
+import { getProducts, getCollections } from '@/lib/products';
+import { PHOTOS, imgAlt } from '@/lib/images';
+
+/* tint fallback cycle for live collections that carry no demo color */
+const TILE_TINTS = ['var(--blue)', 'var(--sage)', 'var(--cream)', 'var(--mustard)', 'var(--blush)', 'var(--terracotta)'];
 
 const REVIEWS = {
   en: [
@@ -53,7 +55,10 @@ function ProductRow({ id, eyebrow, title, cta, href, products, locale, dict }) {
 export default async function Home({ params }) {
   const locale = params.locale === 'ar' ? 'ar' : 'en';
   const dict = getDict(locale);
-  const products = await getProducts(locale);
+  const [products, collections] = await Promise.all([
+    getProducts(locale),
+    getCollections(locale),
+  ]);
   const bestsellers = products.filter((p) => p.tags?.includes('bestseller')).slice(0, 8);
   const shelf = bestsellers.length >= 3 ? bestsellers : products.slice(0, 8);
   const newest = [...products]
@@ -107,18 +112,21 @@ export default async function Home({ params }) {
             <div className="eyebrow">{dict.home.categoriesEyebrow}</div>
             <h2>{dict.home.categoriesTitle}</h2>
           </Reveal>
-          <div className="tiles tiles-5" style={{ marginTop: 22 }}>
-            {CATEGORIES.map((c, i) => {
-              const count = products.filter((p) => c.match.includes(p.typeKey || p.productType)).length;
-              const photo = IMAGES.categories[c.key];
+          <div className="tiles tiles-cats" style={{ marginTop: 22 }}>
+            {collections.map((c, i) => {
+              const count = products.filter((p) => p.collections?.includes(c.handle)).length;
               return (
-                <Reveal key={c.key} delay={i * 0.05}>
-                  <Link href={`/${locale}/shop?type=${encodeURIComponent(c.match[0])}`} className="tile">
+                <Reveal key={c.handle} delay={Math.min(i * 0.05, 0.3)}>
+                  <Link href={`/${locale}/shop/${c.handle}`} className="tile">
                     <div className="tile-media">
-                      <img src={photo.sm || photo.url} alt={imgAlt(photo, locale)} loading="lazy" />
-                      <div className="tile-tint" style={{ background: c.color }} />
+                      {c.image?.url ? (
+                        <img src={c.image.url} alt={c.image.alt || c.title} loading="lazy" />
+                      ) : (
+                        <span className="card-noimg" aria-hidden="true">✦</span>
+                      )}
+                      <div className="tile-tint" style={{ background: c.color || TILE_TINTS[i % TILE_TINTS.length] }} />
                       <div className="tile-overlay">
-                        <h3>{locale === 'ar' ? c.ar : c.en}</h3>
+                        <h3>{c.title}</h3>
                         <p>{count} {dict.shop.results}</p>
                       </div>
                     </div>

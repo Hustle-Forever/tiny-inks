@@ -4,10 +4,15 @@ import Marquee from '@/components/Marquee';
 import Reveal from '@/components/Reveal';
 import ProductCard from '@/components/ProductCard';
 import Countdown from '@/components/Countdown';
+import PhotoFrame from '@/components/PhotoFrame';
+import TornEdge from '@/components/TornEdge';
 import { NewsletterForm } from '@/components/Forms';
 import { getDict } from '@/lib/dictionaries';
 import { getProducts } from '@/lib/products';
 import { CATEGORIES } from '@/lib/mock-data';
+import { IMAGES, imgAlt } from '@/lib/images';
+
+const GALLERY_RATIOS = ['4/5', '1/1', '3/4', '4/5', '1/1', '4/5', '3/4', '1/1'];
 
 const REVIEWS = {
   en: [
@@ -34,6 +39,7 @@ export default async function Home({ params }) {
   return (
     <>
       <HeroAssembly dict={dict} locale={locale} />
+      <TornEdge color="var(--paper)" />
       <Marquee items={dict.marquee} />
 
       <section className="section">
@@ -45,14 +51,17 @@ export default async function Home({ params }) {
           <div className="tiles" style={{ marginTop: 30 }}>
             {CATEGORIES.map((c, i) => {
               const count = products.filter((p) => c.match.includes(p.typeKey || p.productType)).length;
+              const photo = IMAGES.categories[c.key];
               return (
                 <Reveal key={c.key} delay={i * 0.08}>
                   <Link
                     href={`/${locale}/shop?type=${encodeURIComponent(c.match[0])}`}
                     className="tile"
-                    style={{ background: c.color }}
                   >
-                    <div className={`tile-shape ${c.shape}`} style={{ background: 'var(--paper)' }} />
+                    <div className="tile-media">
+                      <img src={photo.url} alt={imgAlt(photo, locale)} loading="lazy" />
+                      <div className="tile-tint" style={{ background: c.color }} />
+                    </div>
                     <h3>{locale === 'ar' ? c.ar : c.en}</h3>
                     <p>{count} {dict.shop.results}</p>
                   </Link>
@@ -81,12 +90,47 @@ export default async function Home({ params }) {
       </section>
 
       <section className="section" style={{ paddingTop: 0 }}>
+        <div className="wrap split wide-start">
+          <Reveal>
+            <PhotoFrame photo={IMAGES.editorial} locale={locale} variant="mat" tape imgStyle={{ aspectRatio: '4/3' }} />
+          </Reveal>
+          <Reveal delay={0.12}>
+            <div className="eyebrow">{dict.home.editorialEyebrow}</div>
+            <h2>{dict.home.editorialTitle}</h2>
+            <p className="lede" style={{ marginBottom: 26 }}>{dict.home.editorialText}</p>
+            <Link href={`/${locale}/about`} className="btn">{dict.home.editorialCta}</Link>
+          </Reveal>
+        </div>
+      </section>
+
+      <section className="section" style={{ paddingTop: 0 }}>
         <div className="wrap">
           <Reveal>
-            <div className="block blush manifesto">
+            <div className="block blush manifesto grain">
               <p>{dict.home.manifesto}</p>
             </div>
           </Reveal>
+        </div>
+      </section>
+
+      <section className="section" style={{ paddingTop: 0 }}>
+        <div className="wrap">
+          <Reveal>
+            <div className="eyebrow">{dict.home.deskEyebrow}</div>
+            <h2>{dict.home.deskTitle}</h2>
+          </Reveal>
+          <div className="masonry" style={{ marginTop: 26 }}>
+            {IMAGES.gallery.map((photo, i) => (
+              <Reveal key={i} delay={(i % 3) * 0.08}>
+                <PhotoFrame
+                  photo={photo}
+                  locale={locale}
+                  variant="plain"
+                  imgStyle={{ aspectRatio: GALLERY_RATIOS[i % GALLERY_RATIOS.length] }}
+                />
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -137,17 +181,21 @@ export default async function Home({ params }) {
             </a>
           </div>
           <div className="ig-strip">
-            {[['var(--blue)', '✎'], ['var(--mustard)', '✦'], ['var(--terracotta)', '❍'], ['var(--sage)', '✉']].map(([bg, glyph], i) => (
+            {IMAGES.polaroids.map((photo, i) => (
               <Reveal key={i} delay={i * 0.06}>
                 <a
                   href={process.env.NEXT_PUBLIC_INSTAGRAM_URL || '#'}
                   target="_blank"
                   rel="noreferrer"
-                  className="ig-tile"
-                  style={{ background: bg }}
                   aria-label="Instagram"
+                  style={{ display: 'block' }}
                 >
-                  {glyph}
+                  <PhotoFrame
+                    photo={photo}
+                    locale={locale}
+                    variant="polaroid"
+                    caption={dict.home.polaroids[i]}
+                  />
                 </a>
               </Reveal>
             ))}
@@ -158,7 +206,7 @@ export default async function Home({ params }) {
       <section className="section" style={{ paddingTop: 0 }}>
         <div className="wrap">
           <Reveal>
-            <div className="block cream" style={{ textAlign: 'center' }}>
+            <div className="block cream grain" style={{ textAlign: 'center' }}>
               <h2>{dict.home.newsTitle}</h2>
               <p className="lede" style={{ margin: '0 auto 26px' }}>{dict.home.newsLede}</p>
               <div style={{ display: 'flex', justifyContent: 'center' }}>

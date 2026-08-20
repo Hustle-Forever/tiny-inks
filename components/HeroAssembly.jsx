@@ -1,6 +1,14 @@
 'use client';
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { IMAGES } from '@/lib/images';
+
+/* small framed photos drifting among the shapes — brand mark meets real paper */
+const FLOATS = [
+  { photo: IMAGES.heroFloats[0], top: '15%', left: '15%', w: 120, depth: 0.7, delay: 0.55, rot: -6 },
+  { photo: IMAGES.heroFloats[1], top: '60%', left: '81%', w: 130, depth: 0.9, delay: 0.68, rot: 5 },
+  { photo: IMAGES.heroFloats[2], top: '73%', left: '7%', w: 112, depth: 0.5, delay: 0.8, rot: 4, hideMobile: true },
+];
 
 const SHAPES = [
   { cls: 'q br', color: 'var(--mustard)', size: 150, top: '14%', left: '7%', depth: 0.5, delay: 0.05, fx: '-80px', fy: '60px', fr: '-30deg' },
@@ -56,6 +64,21 @@ export default function HeroAssembly({ dict, locale }) {
             className={`shape-inner ${s.cls}`}
             style={{ background: s.color, animationDelay: `${s.delay}s`, '--fx': s.fx, '--fy': s.fy, '--fr': s.fr }}
           />
+        </div>
+      ))}
+      {FLOATS.map((f, i) => (
+        <div
+          key={`f${i}`}
+          className={`shape hero-float ${f.hideMobile ? 'hide-mobile' : ''}`}
+          data-depth={f.depth}
+          style={{ top: f.top, left: f.left, width: `calc(${f.w}px * var(--shape-scale))` }}
+        >
+          <div
+            className="hero-float-inner"
+            style={{ animationDelay: `${f.delay}s`, '--rot': `${f.rot}deg` }}
+          >
+            <img src={f.photo.url} alt="" loading="eager" />
+          </div>
         </div>
       ))}
       <div className="shape sparkle" style={{ top: '22%', left: '32%' }} aria-hidden="true">✦</div>

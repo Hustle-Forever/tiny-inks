@@ -61,6 +61,13 @@ export default function CartDrawer({ dict, locale }) {
               <span>{t.subtotal}</span>
               <span>{formatPrice(cart.subtotal, 'AED', locale)}</span>
             </div>
+            <Link
+              href={`/${locale}/cart`}
+              className="btn btn-ghost btn-sm"
+              onClick={() => cart.setOpen(false)}
+            >
+              {t.viewCart}
+            </Link>
             {cart.live ? (
               <button className="btn btn-primary" onClick={cart.checkout}>{t.checkout}</button>
             ) : (

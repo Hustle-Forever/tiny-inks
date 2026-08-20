@@ -1,6 +1,7 @@
 import '../globals.css';
 import { Fraunces, Karla, El_Messiri, IBM_Plex_Sans_Arabic } from 'next/font/google';
 import { getDict, LOCALES } from '@/lib/dictionaries';
+import { SITE_URL } from '@/lib/site';
 import { CartProvider } from '@/components/CartContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -37,14 +38,25 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }) {
-  const dict = getDict(params.locale);
+  const locale = LOCALES.includes(params.locale) ? params.locale : 'en';
+  const dict = getDict(locale);
   return {
+    metadataBase: new URL(SITE_URL),
     title: {
       default: `Tiny Inks — ${dict.tagline}`,
       template: '%s · Tiny Inks',
     },
     description: dict.hero.lede,
     icons: { icon: '/logo-icon.png' },
+    alternates: {
+      languages: { en: '/en', ar: '/ar' },
+    },
+    openGraph: {
+      siteName: 'Tiny Inks',
+      locale: locale === 'ar' ? 'ar_AE' : 'en_AE',
+      type: 'website',
+      images: ['/logo-full.png'],
+    },
   };
 }
 

@@ -3,7 +3,7 @@ import { getDict } from '@/lib/dictionaries';
 
 export async function generateMetadata({ params }) {
   const dict = getDict(params.locale);
-  return { title: dict.nav.about };
+  return { title: dict.nav.about, description: dict.about.p1 };
 }
 
 export default function AboutPage({ params }) {

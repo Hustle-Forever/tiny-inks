@@ -8,7 +8,7 @@ import { getProducts } from '@/lib/products';
 
 export async function generateMetadata({ params }) {
   const dict = getDict(params.locale);
-  return { title: dict.nav.drops };
+  return { title: dict.nav.drops, description: dict.drops.lede };
 }
 
 export default async function DropsPage({ params }) {

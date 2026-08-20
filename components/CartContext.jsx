@@ -16,6 +16,10 @@ export function CartProvider({ children }) {
   const [cartId, setCartId] = useState(null);
   const [checkoutUrl, setCheckoutUrl] = useState(null);
   const [busy, setBusy] = useState(false);
+  // guards the save effect: without it, the initial [] state is written to
+  // localStorage before the load effect's setItems lands (and StrictMode's
+  // double-mount then reloads the clobbered empty value)
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     if (live) {
@@ -34,12 +38,13 @@ export function CartProvider({ children }) {
         const saved = JSON.parse(localStorage.getItem(LS_DEMO) || '[]');
         if (Array.isArray(saved)) setItems(saved);
       } catch {}
+      setHydrated(true);
     }
   }, [live]);
 
   useEffect(() => {
-    if (!live) localStorage.setItem(LS_DEMO, JSON.stringify(items));
-  }, [items, live]);
+    if (!live && hydrated) localStorage.setItem(LS_DEMO, JSON.stringify(items));
+  }, [items, live, hydrated]);
 
   const applyCart = useCallback((cart) => {
     const c = normalizeCart(cart);

@@ -21,12 +21,29 @@ export default function Footer({ dict, locale }) {
         <div>
           <h4>{dict.footer.help}</h4>
           <Link href={`/${locale}/contact`}>{dict.nav.contact}</Link>
+          <Link href={`/${locale}/faq`}>{dict.policies.faq}</Link>
           <a href={`mailto:${email}`}>{email}</a>
+          {wa && <a href={`https://wa.me/${wa}`} target="_blank" rel="noreferrer">WhatsApp</a>}
+        </div>
+        <div>
+          <h4>{dict.policies.title}</h4>
+          <Link href={`/${locale}/policies/shipping`}>{dict.policies.shipping}</Link>
+          <Link href={`/${locale}/policies/returns`}>{dict.policies.returns}</Link>
+          <Link href={`/${locale}/policies/privacy`}>{dict.policies.privacy}</Link>
+          <Link href={`/${locale}/policies/terms`}>{dict.policies.terms}</Link>
         </div>
         <div>
           <h4>{dict.footer.follow}</h4>
           <a href={ig} target="_blank" rel="noreferrer">Instagram</a>
           {wa && <a href={`https://wa.me/${wa}`} target="_blank" rel="noreferrer">WhatsApp</a>}
+          <div className="payment-row">
+            <span className="label">{dict.payment.accept}</span>
+          </div>
+          <div className="payment-row" style={{ marginTop: 6 }}>
+            {dict.payment.methods.map((m) => (
+              <span className="payment-pill" key={m}>{m}</span>
+            ))}
+          </div>
         </div>
       </div>
       <div className="wrap footer-bottom">

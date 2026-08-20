@@ -8,6 +8,7 @@ import PhotoFrame from '@/components/PhotoFrame';
 import TornEdge from '@/components/TornEdge';
 import DeskGallery from '@/components/DeskGallery';
 import EditorialPhoto from '@/components/EditorialPhoto';
+import UspBar from '@/components/UspBar';
 import { NewsletterForm } from '@/components/Forms';
 import { getDict } from '@/lib/dictionaries';
 import { getProducts } from '@/lib/products';
@@ -41,6 +42,7 @@ export default async function Home({ params }) {
       <HeroAssembly dict={dict} locale={locale} />
       <TornEdge color="var(--paper)" />
       <Marquee items={dict.marquee} />
+      <UspBar dict={dict} />
 
       <section className="section">
         <div className="wrap">

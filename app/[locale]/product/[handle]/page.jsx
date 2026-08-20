@@ -8,7 +8,12 @@ import { getProduct, getProducts, formatPrice } from '@/lib/products';
 
 export async function generateMetadata({ params }) {
   const product = await getProduct(params.handle, params.locale);
-  return { title: product ? product.title : 'Product' };
+  if (!product) return { title: 'Product' };
+  return {
+    title: product.title,
+    description: product.description?.slice(0, 160),
+    openGraph: product.images?.[0]?.url ? { images: [product.images[0].url] } : undefined,
+  };
 }
 
 export default async function ProductPage({ params }) {
@@ -23,8 +28,29 @@ export default async function ProductPage({ params }) {
     .slice(0, 4);
   const relatedList = related.length ? related : all.filter((p) => p.handle !== product.handle).slice(0, 4);
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.title,
+    description: product.description,
+    image: (product.images || []).map((i) => i.url),
+    brand: { '@type': 'Brand', name: 'Tiny Inks' },
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: product.currency || 'AED',
+      price: String(product.price),
+      availability: product.available
+        ? 'https://schema.org/InStock'
+        : 'https://schema.org/OutOfStock',
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <section className="section" style={{ paddingTop: 'clamp(30px, 5vw, 60px)' }}>
         <div className="wrap pdp">
           <Gallery images={product.images} title={product.title} />

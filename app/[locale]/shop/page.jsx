@@ -6,7 +6,7 @@ import { getProducts } from '@/lib/products';
 
 export async function generateMetadata({ params }) {
   const dict = getDict(params.locale);
-  return { title: dict.shop.title };
+  return { title: dict.shop.title, description: dict.shop.lede };
 }
 
 export default async function ShopPage({ params }) {

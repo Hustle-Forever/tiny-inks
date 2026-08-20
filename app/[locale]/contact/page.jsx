@@ -4,7 +4,7 @@ import { getDict } from '@/lib/dictionaries';
 
 export async function generateMetadata({ params }) {
   const dict = getDict(params.locale);
-  return { title: dict.nav.contact };
+  return { title: dict.nav.contact, description: dict.contact.lede };
 }
 
 export default function ContactPage({ params }) {

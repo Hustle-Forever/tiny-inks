@@ -1,0 +1,85 @@
+'use client';
+import Link from 'next/link';
+import { useCart } from './CartContext';
+import { formatPrice } from '@/lib/products';
+
+export default function CartPageClient({ dict, locale }) {
+  const cart = useCart();
+  const t = dict.cartUi;
+  const tp = dict.cartPage;
+
+  if (cart.items.length === 0) {
+    return (
+      <div className="empty" style={{ maxWidth: 560, margin: '0 auto' }}>
+        <div className="empty-glyph" aria-hidden="true">✦</div>
+        <h3>{t.empty}</h3>
+        <Link href={`/${locale}/shop`} className="btn btn-primary" style={{ marginTop: 10 }}>
+          {t.emptyCta}
+        </Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="cart-layout">
+      <div className="cart-items">
+        {cart.items.map((item) => (
+          <div className="cart-row" key={item.lineId}>
+            {item.image ? (
+              <Link href={`/${locale}/product/${item.handle}`}>
+                <img src={item.image} alt={item.title} />
+              </Link>
+            ) : (
+              <div className="cart-row-noimg" aria-hidden="true">✦</div>
+            )}
+            <div className="cart-row-info">
+              <Link href={`/${locale}/product/${item.handle}`} className="cart-row-title">
+                {item.title}
+              </Link>
+              <div className="cart-row-price">
+                {formatPrice(item.price, 'AED', locale)} <span>{tp.each}</span>
+              </div>
+              <div className="cart-row-controls">
+                <div className="qty">
+                  <button onClick={() => cart.setQty(item, item.qty - 1)} aria-label="−">−</button>
+                  <span>{item.qty}</span>
+                  <button onClick={() => cart.setQty(item, item.qty + 1)} aria-label="+">+</button>
+                </div>
+                <button className="line-remove" onClick={() => cart.remove(item)}>{t.remove}</button>
+              </div>
+            </div>
+            <strong className="cart-row-total">{formatPrice(item.price * item.qty, 'AED', locale)}</strong>
+          </div>
+        ))}
+        <Link href={`/${locale}/shop`} className="btn btn-ghost btn-sm" style={{ justifySelf: 'start' }}>
+          {tp.continue}
+        </Link>
+      </div>
+
+      <aside className="cart-summary">
+        <h3>{tp.summary}</h3>
+        <div className="subtotal">
+          <span>{t.subtotal}</span>
+          <span>{formatPrice(cart.subtotal, 'AED', locale)}</span>
+        </div>
+        <p className="drawer-note" style={{ textAlign: 'start' }}>✦ {tp.shippingNote}</p>
+        {cart.live ? (
+          <button className="btn btn-primary" onClick={cart.checkout}>{t.checkout}</button>
+        ) : (
+          <>
+            <button className="btn btn-primary" disabled style={{ opacity: 0.55, cursor: 'not-allowed' }}>
+              {t.checkout}
+            </button>
+            <div className="drawer-note">{t.demoNote}</div>
+          </>
+        )}
+        <div className="cart-help">
+          <h4>{tp.goodToKnow}</h4>
+          <Link href={`/${locale}/policies/shipping`}>{dict.policies.shipping}</Link>
+          <Link href={`/${locale}/policies/returns`}>{dict.policies.returns}</Link>
+          <Link href={`/${locale}/faq`}>{dict.policies.faq}</Link>
+        </div>
+      </aside>
+    </div>
+  );
+}

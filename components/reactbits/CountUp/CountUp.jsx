@@ -10,6 +10,7 @@ export default function CountUp({
   className = '',
   startWhen = true,
   separator = '',
+  format, // Tiny Inks: optional custom formatter (used for padded + Arabic-Indic digits)
   onStart,
   onEnd
 }) {
@@ -44,6 +45,7 @@ export default function CountUp({
 
   const formatValue = useCallback(
     latest => {
+      if (format) return format(Math.round(latest));
       const hasDecimals = maxDecimals > 0;
 
       const options = {
@@ -56,7 +58,7 @@ export default function CountUp({
 
       return separator ? formattedNumber.replace(/,/g, separator) : formattedNumber;
     },
-    [maxDecimals, separator]
+    [maxDecimals, separator, format]
   );
 
   useEffect(() => {

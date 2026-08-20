@@ -1,28 +1,25 @@
 'use client';
-import { useEffect, useRef } from 'react';
+import FadeContent from './reactbits/FadeContent/FadeContent';
+import useReducedMotion from './reactbits/useReducedMotion';
 
-export default function Reveal({ children, delay = 0, className = '', as: Tag = 'div' }) {
-  const ref = useRef(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add('in');
-            io.unobserve(e.target);
-          }
-        });
-      },
-      { threshold: 0.12 }
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
+/* Scroll entrance for sections — now driven by React Bits FadeContent
+   (gsap ScrollTrigger) with the site's paper-soft timing. Renders plain
+   content under prefers-reduced-motion. Same API as the old Reveal. */
+export default function Reveal({ children, delay = 0, className = '' }) {
+  const reduced = useReducedMotion();
+  if (reduced !== false) {
+    return <div className={className}>{children}</div>;
+  }
   return (
-    <Tag ref={ref} className={`reveal ${className}`} style={{ '--d': `${delay}s` }}>
+    <FadeContent
+      className={className}
+      slide={30}
+      duration={0.85}
+      ease="power3.out"
+      delay={delay}
+      threshold={0.12}
+    >
       {children}
-    </Tag>
+    </FadeContent>
   );
 }

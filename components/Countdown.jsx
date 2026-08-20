@@ -1,10 +1,14 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import CountUp from './reactbits/CountUp/CountUp';
+import useReducedMotion from './reactbits/useReducedMotion';
 
 const AR_DIGITS = '٠١٢٣٤٥٦٧٨٩';
 
 export default function Countdown({ target, labels, locale = 'en' }) {
   const [t, setT] = useState(null);
+  const reduced = useReducedMotion();
+
   useEffect(() => {
     const end = new Date(target).getTime();
     const tick = () => {
@@ -21,22 +25,38 @@ export default function Countdown({ target, labels, locale = 'en' }) {
     return () => clearInterval(id);
   }, [target]);
 
-  const fmt = (n) => {
-    const s = String(n).padStart(2, '0');
-    return locale === 'ar' ? s.replace(/\d/g, (d) => AR_DIGITS[d]) : s;
-  };
+  /* memoized: CountUp resets its display whenever the formatter's identity
+     changes, and this component re-renders every second */
+  const fmt = useCallback(
+    (n) => {
+      const s = String(Math.max(0, n)).padStart(2, '0');
+      return locale === 'ar' ? s.replace(/\d/g, (d) => AR_DIGITS[d]) : s;
+    },
+    [locale]
+  );
 
   const cells = [
-    [t ? fmt(t.d) : '––', labels.days],
-    [t ? fmt(t.h) : '––', labels.hours],
-    [t ? fmt(t.m) : '––', labels.mins],
-    [t ? fmt(t.s) : '––', labels.secs],
+    [t ? t.d : null, labels.days],
+    [t ? t.h : null, labels.hours],
+    [t ? t.m : null, labels.mins],
+    [t ? t.s : null, labels.secs],
   ];
+
   return (
     <div className="countdown" role="timer">
       {cells.map(([num, label]) => (
         <div className="count-cell" key={label}>
-          <div className="count-num">{num}</div>
+          <div className="count-num">
+            {num === null ? (
+              '––'
+            ) : reduced === false ? (
+              /* React Bits CountUp — digits spring-roll into place (localized
+                 via the custom format: zero-padded, Arabic-Indic on /ar) */
+              <CountUp to={num} duration={1} format={fmt} />
+            ) : (
+              fmt(num)
+            )}
+          </div>
           <div className="count-label">{label}</div>
         </div>
       ))}

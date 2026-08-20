@@ -6,13 +6,13 @@ import ProductCard from '@/components/ProductCard';
 import Countdown from '@/components/Countdown';
 import PhotoFrame from '@/components/PhotoFrame';
 import TornEdge from '@/components/TornEdge';
+import DeskGallery from '@/components/DeskGallery';
+import EditorialPhoto from '@/components/EditorialPhoto';
 import { NewsletterForm } from '@/components/Forms';
 import { getDict } from '@/lib/dictionaries';
 import { getProducts } from '@/lib/products';
 import { CATEGORIES } from '@/lib/mock-data';
 import { IMAGES, imgAlt } from '@/lib/images';
-
-const GALLERY_RATIOS = ['4/5', '1/1', '3/4', '4/5', '1/1', '4/5', '3/4', '1/1'];
 
 const REVIEWS = {
   en: [
@@ -92,7 +92,7 @@ export default async function Home({ params }) {
       <section className="section" style={{ paddingTop: 0 }}>
         <div className="wrap split wide-start">
           <Reveal>
-            <PhotoFrame photo={IMAGES.editorial} locale={locale} variant="mat" tape imgStyle={{ aspectRatio: '4/3' }} />
+            <EditorialPhoto locale={locale} />
           </Reveal>
           <Reveal delay={0.12}>
             <div className="eyebrow">{dict.home.editorialEyebrow}</div>
@@ -119,18 +119,7 @@ export default async function Home({ params }) {
             <div className="eyebrow">{dict.home.deskEyebrow}</div>
             <h2>{dict.home.deskTitle}</h2>
           </Reveal>
-          <div className="masonry" style={{ marginTop: 26 }}>
-            {IMAGES.gallery.map((photo, i) => (
-              <Reveal key={i} delay={(i % 3) * 0.08}>
-                <PhotoFrame
-                  photo={photo}
-                  locale={locale}
-                  variant="plain"
-                  imgStyle={{ aspectRatio: GALLERY_RATIOS[i % GALLERY_RATIOS.length] }}
-                />
-              </Reveal>
-            ))}
-          </div>
+          <DeskGallery locale={locale} />
         </div>
       </section>
 

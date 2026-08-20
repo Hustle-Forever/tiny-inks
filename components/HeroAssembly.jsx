@@ -1,6 +1,8 @@
 'use client';
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
+import SplitText from './reactbits/SplitText/SplitText';
+import useReducedMotion from './reactbits/useReducedMotion';
 import { IMAGES } from '@/lib/images';
 
 /* small framed photos drifting among the shapes — brand mark meets real paper */
@@ -23,6 +25,7 @@ const SHAPES = [
 
 export default function HeroAssembly({ dict, locale }) {
   const wrapRef = useRef(null);
+  const reduced = useReducedMotion();
 
   useEffect(() => {
     const el = wrapRef.current;
@@ -87,9 +90,28 @@ export default function HeroAssembly({ dict, locale }) {
       <div className="wrap hero-inner">
         <img src="/logo-icon.png" alt="Tiny Inks" className="hero-icon" />
         <div className="eyebrow">{dict.hero.eyebrow}</div>
-        <h1>
-          {dict.hero.titleA} {dict.hero.titleB} <em>{dict.hero.titleC}</em>
-        </h1>
+        {reduced === false ? (
+          /* React Bits SplitText — per-letter in English; whole WORDS in Arabic
+             (connected script must never be split into letters) */
+          <SplitText
+            tag="h1"
+            className="hero-title"
+            text={`${dict.hero.titleA} ${dict.hero.titleB} ${dict.hero.titleC}`}
+            splitType={locale === 'ar' ? 'words' : 'words,chars'}
+            delay={locale === 'ar' ? 90 : 26}
+            duration={0.9}
+            ease="power3.out"
+            from={{ opacity: 0, y: 36 }}
+            to={{ opacity: 1, y: 0 }}
+            threshold={0.2}
+            rootMargin="0px"
+            textAlign="center"
+          />
+        ) : (
+          <h1 className="hero-title">
+            {dict.hero.titleA} {dict.hero.titleB} <em>{dict.hero.titleC}</em>
+          </h1>
+        )}
         <p className="lede">{dict.hero.lede}</p>
         <div className="hero-ctas">
           <Link href={`/${locale}/shop`} className="btn btn-primary">{dict.hero.ctaShop}</Link>

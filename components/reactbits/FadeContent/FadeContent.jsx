@@ -8,6 +8,7 @@ const FadeContent = ({
   children,
   container,
   blur = false,
+  slide = 0, // Tiny Inks: px of translateY for the entrance (matches the old Reveal)
   duration = 1000,
   ease = 'power2.out',
   delay = 0,
@@ -39,6 +40,7 @@ const FadeContent = ({
 
     gsap.set(el, {
       autoAlpha: initialOpacity,
+      y: slide || 0,
       filter: blur ? 'blur(10px)' : 'blur(0px)',
       willChange: 'opacity, filter, transform'
     });
@@ -63,6 +65,7 @@ const FadeContent = ({
 
     tl.to(el, {
       autoAlpha: 1,
+      y: 0,
       filter: 'blur(0px)',
       duration: getSeconds(duration),
       ease: ease

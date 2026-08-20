@@ -105,13 +105,13 @@ const Masonry = ({
     preloadImages(items.map(i => i.img)).then(() => setImagesReady(true));
   }, [items]);
 
-  const grid = useMemo(() => {
-    if (!width) return [];
+  const [grid, containerHeight] = useMemo(() => {
+    if (!width) return [[], 0];
 
     const colHeights = new Array(columns).fill(0);
     const columnWidth = width / columns;
 
-    return items.map(child => {
+    const laidOut = items.map(child => {
       const col = colHeights.indexOf(Math.min(...colHeights));
       const x = columnWidth * col;
       const height = child.height / 2;
@@ -121,6 +121,7 @@ const Masonry = ({
 
       return { ...child, x, y, w: columnWidth, h: height };
     });
+    return [laidOut, Math.max(...colHeights, 0)];
   }, [columns, items, width]);
 
   const hasMounted = useRef(false);
@@ -217,18 +218,23 @@ const Masonry = ({
   };
 
   return (
-    <div ref={containerRef} className="list">
+    <div ref={containerRef} className="rb-masonry" style={{ height: containerHeight }}>
       {grid.map(item => {
         return (
           <div
             key={item.id}
             data-key={item.id}
-            className="item-wrapper"
-            onClick={() => window.open(item.url, '_blank', 'noopener')}
+            className={`rb-masonry-item ${item.url ? 'linked' : ''}`}
+            onClick={item.url ? () => window.open(item.url, '_blank', 'noopener') : undefined}
             onMouseEnter={e => handleMouseEnter(e, item)}
             onMouseLeave={e => handleMouseLeave(e, item)}
           >
-            <div className="item-img" style={{ backgroundImage: `url(${item.img})` }}>
+            <div
+              className="rb-masonry-img"
+              style={{ backgroundImage: `url(${item.img})` }}
+              role="img"
+              aria-label={item.alt || ''}
+            >
               {colorShiftOnHover && (
                 <div
                   className="color-overlay"

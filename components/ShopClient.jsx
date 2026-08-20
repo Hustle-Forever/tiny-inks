@@ -1,5 +1,5 @@
 'use client';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import ProductCard from './ProductCard';
 import { COLOR_SWATCHES, COLOR_NAMES } from '@/lib/mock-data';
@@ -56,17 +56,25 @@ export default function ShopClient({ products, dict, locale }) {
   const hasFilters = activeCount > 0;
   const clear = () => { setType('all'); setColor('all'); setPrice('all'); };
 
+  /* mobile bottom sheet: lock body scroll + close on Escape while open */
+  useEffect(() => {
+    if (!panelOpen) return;
+    document.body.style.overflow = 'hidden';
+    const onKey = (e) => { if (e.key === 'Escape') setPanelOpen(false); };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [panelOpen]);
+
   return (
     <div className="shop-layout">
-      <button
-        className={`filters-toggle chip ${panelOpen || hasFilters ? 'on' : ''}`}
-        onClick={() => setPanelOpen((v) => !v)}
-        aria-expanded={panelOpen}
-      >
-        {t.filters}{hasFilters ? ` · ${activeCount}` : ''} {panelOpen ? '−' : '+'}
-      </button>
-
-      <aside className={`filters ${panelOpen ? 'open' : ''}`}>
+      <div
+        className={`sheet-veil ${panelOpen ? 'open' : ''}`}
+        onClick={() => setPanelOpen(false)}
+      />
+      <aside className={`filters ${panelOpen ? 'open' : ''}`} aria-label={t.filters}>
         <div className="filter-group">
           <h4>{t.type}</h4>
           <div className="chips">
@@ -104,17 +112,29 @@ export default function ShopClient({ products, dict, locale }) {
         {hasFilters && (
           <button className="btn btn-ghost btn-sm" onClick={clear}>{t.clear}</button>
         )}
+        <button className="btn btn-primary sheet-apply" onClick={() => setPanelOpen(false)}>
+          {t.show} {filtered.length} {t.results} ✦
+        </button>
       </aside>
 
       <div>
         <div className="shop-toolbar">
           <span className="result-count" aria-live="polite">{filtered.length} {t.results}</span>
-          <select className="select" value={sort} onChange={(e) => setSort(e.target.value)} aria-label={t.sort}>
-            <option value="featured">{t.sortFeatured}</option>
-            <option value="new">{t.sortNew}</option>
-            <option value="low">{t.sortLow}</option>
-            <option value="high">{t.sortHigh}</option>
-          </select>
+          <div className="toolbar-actions">
+            <select className="select" value={sort} onChange={(e) => setSort(e.target.value)} aria-label={t.sort}>
+              <option value="featured">{t.sortFeatured}</option>
+              <option value="new">{t.sortNew}</option>
+              <option value="low">{t.sortLow}</option>
+              <option value="high">{t.sortHigh}</option>
+            </select>
+            <button
+              className={`filters-toggle chip ${hasFilters ? 'on' : ''}`}
+              onClick={() => setPanelOpen(true)}
+              aria-expanded={panelOpen}
+            >
+              {t.filters}{hasFilters ? ` · ${activeCount}` : ''}
+            </button>
+          </div>
         </div>
 
         {filtered.length === 0 ? (

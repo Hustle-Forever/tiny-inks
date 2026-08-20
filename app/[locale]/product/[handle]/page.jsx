@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import Reveal from '@/components/Reveal';
 import Gallery from '@/components/Gallery';
 import AddToCart from '@/components/AddToCart';
+import BuyBar from '@/components/BuyBar';
 import ProductCard from '@/components/ProductCard';
 import { getDict } from '@/lib/dictionaries';
 import { getProduct, getProducts, formatPrice } from '@/lib/products';
@@ -51,7 +52,7 @@ export default async function ProductPage({ params }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <section className="section" style={{ paddingTop: 'clamp(30px, 5vw, 60px)' }}>
+      <section className="section pdp-section" style={{ paddingTop: 'clamp(30px, 5vw, 60px)' }}>
         <div className="wrap pdp">
           <Gallery images={product.images} title={product.title} />
           <div className="pdp-buy">
@@ -80,6 +81,8 @@ export default async function ProductPage({ params }) {
           </div>
         </section>
       )}
+
+      <BuyBar product={product} dict={dict} locale={locale} />
     </>
   );
 }
